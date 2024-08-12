@@ -1,12 +1,11 @@
 import UIKit
 
-class ViewController: UIViewController {
-
+final class StatisticsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let label = UILabel()
-        label.text = "Hello, World!"
+        label.text = "Statistics"
         label.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(label)
@@ -15,8 +14,7 @@ class ViewController: UIViewController {
             label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
+        
+        view.backgroundColor = .ypWhite
     }
-
-
 }
-
