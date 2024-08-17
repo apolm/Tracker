@@ -1,6 +1,6 @@
 import UIKit
 
-final class TrackersListViewController: UIViewController {
+final class TrackersViewController: UIViewController {
     // MARK: - Private Properties
     private lazy var addTrackerButton: UIBarButtonItem = {
         let boldWeight = UIImage.SymbolConfiguration(weight: .bold)
@@ -32,6 +32,9 @@ final class TrackersListViewController: UIViewController {
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()
+    
+    private var categories: [TrackerCategory] = []
+    private var completedTrackers: [TrackerRecord] = []
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
