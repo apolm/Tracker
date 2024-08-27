@@ -1,11 +1,11 @@
 import UIKit
 
-final class Test: UIViewController {
+final class Test: AddTrackerFlowViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let label = UILabel()
-        label.text = "TEST"
+        label.text = "Test"
         label.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(label)
@@ -15,6 +15,24 @@ final class Test: UIViewController {
             label.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         
-        view.backgroundColor = .ypWhite
+        let button = UIButton()
+        button.setTitle("Go Back", for: .normal)
+        button.backgroundColor = .systemBlue
+        button.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(button)
+        
+        NSLayoutConstraint.activate([
+            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            button.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+        
+        title = "Test"
+    }
+    
+    @objc private func buttonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }

@@ -1,24 +1,32 @@
 import Foundation
 
-enum Weekday: CaseIterable {
-    case monday, tuesday, wednesday, thursday, friday, saturday, sunday
+enum Weekday: Int, CaseIterable {
+    case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
     
     var name: String {
         switch self {
         case .monday:
-            "Понедельник"
+            return "Понедельник"
         case .tuesday:
-            "Вторник"
+            return "Вторник"
         case .wednesday:
-            "Среда"
+            return "Среда"
         case .thursday:
-            "Четверг"
+            return "Четверг"
         case .friday:
-            "Пятница"
+            return "Пятница"
         case .saturday:
-            "Суббота"
+            return "Суббота"
         case .sunday:
-            "Воскресенье"
+            return "Воскресенье"
         }
     }
+    
+    init(date: Date) {
+        self = Weekday(rawValue: Calendar.current.component(.weekday, from: date)) ?? .monday
+    }
 }
+
+// Get the first weekday according to the current calendar settings
+//let calendar = Calendar.current
+//let firstWeekday = calendar.firstWeekday

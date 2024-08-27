@@ -1,7 +1,6 @@
 import UIKit
 
-struct TrackerCategory: Hashable {
-    let id: UUID
+struct TrackerCategory {
     let name: String
     let trackers: [Tracker]
 }
