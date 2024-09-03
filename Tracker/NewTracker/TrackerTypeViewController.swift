@@ -1,12 +1,12 @@
 import UIKit
 
 final class TrackerTypeViewController: AddTrackerFlowViewController {
-    private lazy var regularTrackerButton: UIButton = {
-        return createButton(withTitle: "Привычка")
+    private lazy var regularTrackerButton: ActionButton = {
+        ActionButton(title: "Привычка", target: self, action: #selector(buttonDidTap))
     }()
     
-    private lazy var irregularTrackerButton: UIButton = {
-        return createButton(withTitle: "Нерегулярное событие")
+    private lazy var irregularTrackerButton: ActionButton = {
+        ActionButton(title: "Нерегулярное событие", target: self, action: #selector(buttonDidTap))
     }()
     
     private lazy var stackView: UIStackView = {
@@ -17,19 +17,6 @@ final class TrackerTypeViewController: AddTrackerFlowViewController {
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
-    
-    private func createButton(withTitle title: String) -> UIButton {
-        let button = UIButton()
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(.ypWhite, for: .normal)
-        button.backgroundColor = .ypBlack
-        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
-        button.layer.cornerRadius = 16
-        button.layer.masksToBounds = true
-        button.addTarget(self, action: #selector(buttonDidTap), for: .touchUpInside)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

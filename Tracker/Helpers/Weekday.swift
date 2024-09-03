@@ -26,7 +26,3 @@ enum Weekday: Int, CaseIterable {
         self = Weekday(rawValue: Calendar.current.component(.weekday, from: date)) ?? .monday
     }
 }
-
-// Get the first weekday according to the current calendar settings
-//let calendar = Calendar.current
-//let firstWeekday = calendar.firstWeekday
