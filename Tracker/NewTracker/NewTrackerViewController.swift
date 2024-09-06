@@ -1,46 +1,14 @@
 import UIKit
 
-//TODO: - доступность кнопки, видимость расписания
-
 final class NewTrackerViewController: AddTrackerFlowViewController {
-    // MARK: - Public Properties
-    let isRegular: Bool //TODO: обработать
-    
     // MARK: - Private Properties
     private lazy var tableView: UITableView = {
         let table = BaseTable(frame: .zero, style: .grouped)
         table.baseTableDelegate = self
-        table.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
+        table.register(TextCell.self, forCellReuseIdentifier: textCellID)
+        table.register(LinkCell.self, forCellReuseIdentifier: linkCellID)
         table.translatesAutoresizingMaskIntoConstraints = false
         return table
-    }()
-    
-    private lazy var textField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
-        textField.font = .systemFont(ofSize: 17, weight: .regular)
-        textField.clearButtonMode = .whileEditing
-        textField.borderStyle = .none
-        textField.backgroundColor = .clear
-        textField.translatesAutoresizingMaskIntoConstraints = false
-                
-        return textField
-    }()
-    
-    private lazy var categoryLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Категория"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    private lazy var scheduleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Расписание"
-        label.font = .systemFont(ofSize: 17, weight: .regular)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
     }()
     
     private lazy var cancelButton: UIButton = {
@@ -62,7 +30,11 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
         ActionButton(title: "Создать", target: self, action: #selector(createButtonDidTap))
     }()
     
-    private var schedule: Set<Weekday>?
+    private let isRegular: Bool
+    private var name: String = ""
+    private var days: Set<Weekday>?
+    private let textCellID = "TextCell"
+    private let linkCellID = "LinkCell"
     
     // MARK: - Public Methods
     init(isRegular: Bool) {
@@ -82,6 +54,11 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
         view.addSubview(cancelButton)
         view.addSubview(createButton)
         setupConstraints()
+        configureViewState()
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
         
         title = isRegular ? "Новая привычка" : "Новое нерегулярное событие"
     }
@@ -106,13 +83,22 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
         ])
     }
     
+    private func configureViewState() {
+        let daysAreValid = days?.isEmpty == false || !isRegular
+        createButton.isEnabled = !name.isEmpty && daysAreValid
+    }
+    
     // MARK: - Actions
     @objc private func cancelButtonDidTap() {
-        
+        self.dismiss(animated: true)
     }
     
     @objc private func createButtonDidTap() {
         
+    }
+    
+    @objc private func dismissKeyboard() {
+        view.endEditing(true)
     }
 }
 
@@ -123,51 +109,55 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
     }
     
     func numberOfRowsInSection(_ section: Int) -> Int {
-        section == 0 ? 1 : 2
+        section == 0 ? 1 : (isRegular ? 2 : 1)
     }
     
     func cellForRowAt(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        
-        if indexPath.section == 0 {
-            cell.contentView.addSubview(textField)
-            NSLayoutConstraint.activate([
-                textField.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
-                textField.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -12),
-                textField.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-                textField.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
-            ])
-        } else {
-            cell.accessoryType = .disclosureIndicator
-            
-            if indexPath.row == 0 {
-                cell.contentView.addSubview(categoryLabel)
-                
-                NSLayoutConstraint.activate([
-                    categoryLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
-                    categoryLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -16),
-                    categoryLabel.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-                    categoryLabel.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
-                ])
-            } else if indexPath.row == 1 {
-                cell.contentView.addSubview(scheduleLabel)
-                
-                NSLayoutConstraint.activate([
-                    scheduleLabel.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
-                    scheduleLabel.trailingAnchor.constraint(equalTo: cell.contentView.trailingAnchor, constant: -16),
-                    scheduleLabel.topAnchor.constraint(equalTo: cell.contentView.topAnchor),
-                    scheduleLabel.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor)
-                ])
+        switch indexPath.section {
+        case 0:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: textCellID, for: indexPath) as? TextCell else {
+                return UITableViewCell()
             }
+            cell.onTextChange = { [weak self] text in
+                self?.name = text
+                self?.configureViewState()
+            }
+            return cell
+            
+        case 1:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: linkCellID, for: indexPath) as? LinkCell else {
+                return UITableViewCell()
+            }
+            if indexPath.row == 0 {
+                cell.configure(title: "Категория", caption: "Общая категория")
+            } else if indexPath.row == 1 {
+                var caption = ""
+                if let days {
+                    if days.count == Weekday.allCases.count {
+                        caption = "Каждый день"
+                    } else {
+                        caption = Weekday.orderedWeekdays()
+                            .filter{ days.contains($0) }
+                            .map{ $0.shortName }
+                            .joined(separator: ", ")
+                    }
+                }
+                cell.configure(title: "Расписание", caption: caption)
+            }
+            return cell
+            
+        default:
+            return UITableViewCell()
         }
-        return cell
     }
     
     func didSelectRowAt(indexPath: IndexPath) {
         if indexPath.section == 1 && indexPath.row == 1 {
-            let viewController = ScheduleViewController(days: schedule)
+            let viewController = ScheduleViewController(days: days)
             viewController.onCompletion = { [weak self] result in
-                self?.schedule = result
+                self?.days = result
+                self?.tableView.reloadData()
+                self?.configureViewState()
             }
             navigationController?.pushViewController(viewController, animated: true)
         }

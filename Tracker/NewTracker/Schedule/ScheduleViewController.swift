@@ -9,7 +9,7 @@ final class ScheduleViewController: AddTrackerFlowViewController {
         return table
     }()
     private lazy var completeButton: ActionButton = {
-        ActionButton(title: "Готово", target: self, action: #selector(buttonDidTap))
+        ActionButton(title: "Готово", target: self, action: #selector(completeButtonDidTap))
     }()
     private var schedule: [(Weekday, Bool)] = []
     private let cellReuseID = "ScheduleCell"
@@ -17,13 +17,8 @@ final class ScheduleViewController: AddTrackerFlowViewController {
     var onCompletion: ((Set<Weekday>) -> Void)?
     
     init(days: Set<Weekday>? = nil) {
-        let firstWeekday = Calendar.current.firstWeekday
-        schedule = (0..<7).compactMap { index in
-            let dayIndex = (index + firstWeekday - 1) % 7 + 1
-            if let day = Weekday(rawValue: dayIndex) {
-                return (day, days?.contains(day) ?? false)
-            }
-            return nil
+        schedule = Weekday.orderedWeekdays().map { day in
+            (day, days?.contains(day) ?? false)
         }
         
         super.init(nibName: nil, bundle: nil)
@@ -43,7 +38,7 @@ final class ScheduleViewController: AddTrackerFlowViewController {
         title = "Расписание"
     }
     
-    @objc func buttonDidTap(_ sender: UIButton) {
+    @objc func completeButtonDidTap(_ sender: UIButton) {
         let days = Set(schedule.filter{ $0.1 }.map{ $0.0 })
         onCompletion?(days)
         

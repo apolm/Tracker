@@ -3,26 +3,33 @@ import Foundation
 enum Weekday: Int, CaseIterable {
     case sunday = 1, monday, tuesday, wednesday, thursday, friday, saturday
     
-    var name: String {
-        switch self {
-        case .monday:
-            return "Понедельник"
-        case .tuesday:
-            return "Вторник"
-        case .wednesday:
-            return "Среда"
-        case .thursday:
-            return "Четверг"
-        case .friday:
-            return "Пятница"
-        case .saturday:
-            return "Суббота"
-        case .sunday:
-            return "Воскресенье"
+    private static let formatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale.current
+        return formatter
+    }()
+    
+    var fullName: String {
+        return Weekday.formatter.weekdaySymbols[self.rawValue - 1].capitalized
+    }
+    
+    var shortName: String {
+        return Weekday.formatter.shortWeekdaySymbols[self.rawValue - 1].capitalized
+    }
+    
+    static func orderedWeekdays() -> [Weekday] {
+        let firstWeekday = Calendar.current.firstWeekday
+        return (0..<7).compactMap { index in
+            let dayIndex = (index + firstWeekday - 1) % 7 + 1
+            if let day = Weekday(rawValue: dayIndex) {
+                return day
+            }
+            return nil
         }
     }
     
     init(date: Date) {
-        self = Weekday(rawValue: Calendar.current.component(.weekday, from: date)) ?? .monday
+        let weekdayIndex = Calendar.current.component(.weekday, from: date)
+        self = Weekday(rawValue: weekdayIndex) ?? .monday
     }
 }

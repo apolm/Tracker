@@ -39,7 +39,7 @@ final class ScheduleCell: UITableViewCell {
     }
     
     func configure(with weekday: Weekday, isOn: Bool, onToggle: @escaping (Bool) -> Void) {
-        dayLabel.text = weekday.name
+        dayLabel.text = weekday.fullName
         daySwitch.isOn = isOn
         self.onToggle = onToggle
     }
