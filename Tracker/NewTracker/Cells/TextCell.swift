@@ -11,6 +11,7 @@ final class TextCell: UITableViewCell {
         textField.borderStyle = .none
         textField.backgroundColor = .clear
         textField.returnKeyType = .go
+        textField.autocorrectionType = .no
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         textField.translatesAutoresizingMaskIntoConstraints = false

@@ -49,17 +49,21 @@ final class TrackersViewController: UIViewController {
         return collectionView
     }()
     
-    private var currentDate: Date = Date()
+    private var currentDate: Date = Date().startOfDay
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
+    
+    // Helpers
     private var completedIds: Set<UUID> = [] // Trackers completed in current date
     
-    // Temp collections (before CoreData)
+    // Temp (before CoreData)
     private var allTrackers: [Tracker] = [] // All created trackers
+    private var completionsCounter: [UUID: Int] = [:] // Number of tracker completions
+    static let notificationName = NSNotification.Name("AddNewTracker")
     
     private let cellIdentifier = "cell"
     private let headerIdentifier = "header"
-    private let params = GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpacing: 10)
+    private let layoutParams = GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpacing: 10)
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -73,23 +77,12 @@ final class TrackersViewController: UIViewController {
         
         setupConstraints()
         setupNavigationBar()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(addNewTracker), name: TrackersViewController.notificationName, object: nil)
     }
     
-    //TODO
-    private func makeMockData() {
-        let t1 = Tracker(id: UUID(), name: "Поливать растения", color: UIColor(red: 51/255.0, green: 207/255.0, blue: 105/255.0, alpha: 1), emoji: "🌺", days: [.monday, .friday])
-        let t2 = Tracker(id: UUID(), name: "Кошка заслонила камеру на созвоне", color: UIColor(red: 255/255.0, green: 136/255.0, blue: 30/255.0, alpha: 1), emoji: "😻", days: [.tuesday, .thursday, .saturday])
-        let t3 = Tracker(id: UUID(), name: "Бабушка прислала открытку в вотсапе", color: UIColor(red: 255/255.0, green: 103/255.0, blue: 77/255.0, alpha: 1), emoji: "❤️", days: [.wednesday])
-//        let category = TrackerCategory(name: "Домашний уют", trackers: [t1, t2, t3])
-//        categories.append(category)
-        
-        let t4 = Tracker(id: UUID(), name: "Свидания в апреле", color: UIColor(red: 173/255.0, green: 86/255.0, blue: 218/255.0, alpha: 1), emoji: "💫", days: [.monday, .friday])
-        let t5 = Tracker(id: UUID(), name: "Хорошее настроение", color: UIColor(red: 249/255.0, green: 212/255.0, blue: 212/255.0, alpha: 1), emoji: "🚴‍♂️", days: [.tuesday, .thursday, .saturday])
-        let t6 = Tracker(id: UUID(), name: "Тест 3", color: UIColor(red: 246/255.0, green: 196/255.0, blue: 139/255.0, alpha: 1), emoji: "🚴‍♂️", days: [.tuesday, .thursday, .saturday])
-//        let category2 = TrackerCategory(name: "Радостные мелочи", trackers: [t4, t5, t6])
-//        categories.append(category2)
-        allTrackers.append(contentsOf: [t1, t2, t3, t4, t5, t6])
-        update()
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: TrackersViewController.notificationName, object: nil)
     }
     
     // MARK: - Private Methods
@@ -111,6 +104,13 @@ final class TrackersViewController: UIViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Трекеры"
+    }
+    
+    @objc
+    private func addNewTracker(_ notification: Notification) {
+        guard let tracker = notification.object as? Tracker else { return }
+        allTrackers.append(tracker)
+        update()
     }
     
     private func update() {
@@ -148,39 +148,10 @@ final class TrackersViewController: UIViewController {
         let navigationController = UINavigationController(rootViewController: viewController)
         navigationController.modalPresentationStyle = .formSheet
         present(navigationController, animated: true)
-        
-        
-//        if allTrackers.count == 0 {
-//            let t1 = Tracker(id: UUID(), name: "Поливать растения", color: UIColor(red: 51/255.0, green: 207/255.0, blue: 105/255.0, alpha: 1), emoji: "🌺", days: [.monday, .friday])
-//            allTrackers.append(t1)
-//            update()
-//        } else if allTrackers.count == 1 {
-//            let t2 = Tracker(id: UUID(), name: "Кошка заслонила камеру на созвоне", color: UIColor(red: 255/255.0, green: 136/255.0, blue: 30/255.0, alpha: 1), emoji: "😻", days: [.tuesday, .thursday, .saturday])
-//            allTrackers.append(t2)
-//            update()
-//        } else if allTrackers.count == 2 {
-//            let t3 = Tracker(id: UUID(), name: "Бабушка прислала открытку в вотсапе", color: UIColor(red: 255/255.0, green: 103/255.0, blue: 77/255.0, alpha: 1), emoji: "❤️", days: [.wednesday])
-//            allTrackers.append(t3)
-//            update()
-//        } else if allTrackers.count == 3 {
-//            let t4 = Tracker(id: UUID(), name: "Свидания в апреле", color: UIColor(red: 173/255.0, green: 86/255.0, blue: 218/255.0, alpha: 1), emoji: "💫", days: [.monday, .friday])
-//            allTrackers.append(t4)
-//            update()
-//        } else if allTrackers.count == 4 {
-//            let t5 = Tracker(id: UUID(), name: "Хорошее настроение", color: UIColor(red: 249/255.0, green: 212/255.0, blue: 212/255.0, alpha: 1), emoji: "🚴‍♂️", days: [.tuesday, .thursday, .saturday])
-//            allTrackers.append(t5)
-//            update()
-//        } else if allTrackers.count == 5 {
-//            let t6 = Tracker(id: UUID(), name: "Тест 3", color: UIColor(red: 246/255.0, green: 196/255.0, blue: 139/255.0, alpha: 1), emoji: "🚴‍♂️", days: [.tuesday, .thursday, .saturday])
-//            allTrackers.append(t6)
-//            update()
-//        } else {
-//            return
-//        }
     }
     
     @objc private func datePickerValueChanged(_ sender: UIDatePicker) {
-        currentDate = sender.date
+        currentDate = sender.date.startOfDay
         
         if let datePicker = datePickerButton.customView as? UIDatePicker {
             datePicker.removeFromSuperview()
@@ -215,8 +186,12 @@ extension TrackersViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
-        cell.prepareForReuse()
-        cell.config(with: categories[indexPath.section].trackers[indexPath.row])
+        let tracker = categories[indexPath.section].trackers[indexPath.row]
+        cell.config(with: tracker,
+                    numberOfCompletions: completionsCounter[tracker.id] ?? 0,
+                    isCompleted: completedIds.contains(tracker.id),
+                    completionIsEnabled: currentDate <= Date().startOfDay)
+        cell.delegate = self
         return cell
     }
 }
@@ -232,13 +207,13 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.frame.width - params.paddingWidth
-        let cellWidth =  availableWidth / CGFloat(params.cellCount)
+        let availableWidth = collectionView.frame.width - layoutParams.paddingWidth
+        let cellWidth =  availableWidth / CGFloat(layoutParams.cellCount)
         return CGSize(width: cellWidth, height: 148)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 12, left: params.leftInset, bottom: 16, right: params.rightInset)
+        return UIEdgeInsets(top: 12, left: layoutParams.leftInset, bottom: 16, right: layoutParams.rightInset)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -246,22 +221,26 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        params.cellSpacing
+        layoutParams.cellSpacing
     }
 }
 
-private struct GeometricParams {
-    let cellCount: Int
-    let leftInset: CGFloat
-    let rightInset: CGFloat
-    let cellSpacing: CGFloat
-    let paddingWidth: CGFloat
-    
-    init(cellCount: Int, leftInset: CGFloat, rightInset: CGFloat, cellSpacing: CGFloat) {
-        self.cellCount = cellCount
-        self.leftInset = leftInset
-        self.rightInset = rightInset
-        self.cellSpacing = cellSpacing
-        self.paddingWidth = leftInset + rightInset + CGFloat(cellCount - 1) * cellSpacing
+// MARK: - TrackerCellDelegate
+extension TrackersViewController: TrackerCellDelegate {
+    func trackerCellDidChangeCompletion(for cell: TrackerCell, to isCompleted: Bool) {
+        guard let indexPath = collectionView.indexPath(for: cell) else { return }
+        let tracker = categories[indexPath.section].trackers[indexPath.row]
+        
+        if isCompleted {
+            completedTrackers.append(TrackerRecord(trackerId: tracker.id, date: currentDate))
+            completedIds.insert(tracker.id)
+            completionsCounter[tracker.id] = (completionsCounter[tracker.id] ?? 0) + 1
+        } else {
+            completedTrackers.removeAll { $0.trackerId == tracker.id && $0.date == currentDate }
+            completedIds.remove(tracker.id)
+            if let currentCount = completionsCounter[tracker.id], currentCount > 0 {
+                completionsCounter[tracker.id] = currentCount - 1
+            }
+        }
     }
 }

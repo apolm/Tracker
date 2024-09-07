@@ -94,7 +94,18 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     }
     
     @objc private func createButtonDidTap() {
-        
+        let color = [
+            UIColor(red: 51/255.0, green: 207/255.0, blue: 105/255.0, alpha: 1),
+            UIColor(red: 255/255.0, green: 136/255.0, blue: 30/255.0, alpha: 1),
+            UIColor(red: 255/255.0, green: 103/255.0, blue: 77/255.0, alpha: 1),
+            UIColor(red: 173/255.0, green: 86/255.0, blue: 218/255.0, alpha: 1),
+            UIColor(red: 249/255.0, green: 212/255.0, blue: 212/255.0, alpha: 1),
+            UIColor(red: 246/255.0, green: 196/255.0, blue: 139/255.0, alpha: 1)
+        ].randomElement()!
+        let emoji = ["🌺", "😻", "❤️", "💫", "🥦", "🥇"].randomElement()!
+        let tracker = Tracker(id: UUID(), name: name, color: color, emoji: emoji, days: days)
+        NotificationCenter.default.post(name: TrackersViewController.notificationName, object: tracker)
+        self.dismiss(animated: true)
     }
     
     @objc private func dismissKeyboard() {
