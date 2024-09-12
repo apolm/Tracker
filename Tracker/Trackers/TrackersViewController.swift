@@ -39,7 +39,7 @@ final class TrackersViewController: UIViewController {
                                               collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TrackerCell.self,
                                 forCellWithReuseIdentifier: cellIdentifier)
-        collectionView.register(CategoryHeader.self,
+        collectionView.register(SectionHeader.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: headerIdentifier)
         collectionView.delegate = self
@@ -63,7 +63,7 @@ final class TrackersViewController: UIViewController {
     
     private let cellIdentifier = "cell"
     private let headerIdentifier = "header"
-    private let layoutParams = GeometricParams(cellCount: 2, leftInset: 16, rightInset: 16, cellSpacing: 10)
+    private let layoutParams = GeometricParams(columnCount: 2, rowCount: 0, leftInset: 16, rightInset: 16, topInset: 12, bottomInset: 16, columnSpacing: 10, rowSpacing: 0)
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
@@ -164,10 +164,10 @@ final class TrackersViewController: UIViewController {
 // MARK: - UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as? CategoryHeader else {
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as? SectionHeader else {
             return UICollectionReusableView()
         }
-        view.config(with: categories[indexPath.section])
+        view.config(with: categories[indexPath.section].name)
         return view
     }
 }
@@ -207,21 +207,21 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let availableWidth = collectionView.frame.width - layoutParams.paddingWidth
-        let cellWidth =  availableWidth / CGFloat(layoutParams.cellCount)
+        let availableWidth = collectionView.frame.width - layoutParams.totalInsetWidth
+        let cellWidth =  availableWidth / CGFloat(layoutParams.columnCount)
         return CGSize(width: cellWidth, height: 148)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 12, left: layoutParams.leftInset, bottom: 16, right: layoutParams.rightInset)
+        return UIEdgeInsets(top: layoutParams.topInset, left: layoutParams.leftInset, bottom: layoutParams.bottomInset, right: layoutParams.rightInset)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        0
+        layoutParams.rowSpacing
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        layoutParams.cellSpacing
+        layoutParams.columnSpacing
     }
 }
 

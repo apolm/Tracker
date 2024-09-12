@@ -1,6 +1,6 @@
 import UIKit
 
-final class CategoryHeader: UICollectionReusableView {
+final class SectionHeader: UICollectionReusableView {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 19)
@@ -25,7 +25,7 @@ final class CategoryHeader: UICollectionReusableView {
         super.init(coder: coder)
     }
     
-    func config(with category: TrackerCategory) {
-        titleLabel.text = category.name
+    func config(with title: String) {
+        titleLabel.text = title
     }
 }
