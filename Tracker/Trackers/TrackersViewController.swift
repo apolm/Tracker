@@ -49,7 +49,15 @@ final class TrackersViewController: UIViewController {
         return collectionView
     }()
     
+    private lazy var trackerStore: TrackerStoreProtocol = {
+        TrackerStore(delegate: self)
+    }()
+    
     private var currentDate: Date = Date().startOfDay
+
+// TODO: - REMOVE ++
+// ----------------------------------------------------------------------------------------------------
+
     private var categories: [TrackerCategory] = []
     private var completedTrackers: [TrackerRecord] = []
     
@@ -59,6 +67,10 @@ final class TrackersViewController: UIViewController {
     // Temp (before CoreData)
     private var allTrackers: [Tracker] = [] // All created trackers
     private var completionsCounter: [UUID: Int] = [:] // Number of tracker completions
+
+// ----------------------------------------------------------------------------------------------------
+// TODO: - REMOVE --
+    
     static let notificationName = NSNotification.Name("AddNewTracker")
     
     private let cellIdentifier = "cell"
@@ -175,11 +187,11 @@ extension TrackersViewController: UICollectionViewDelegate {
 // MARK: - UICollectionViewDataSource
 extension TrackersViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return categories.count
+        return trackerStore.numberOfSections
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return categories[section].trackers.count
+        return trackerStore.numberOfItemsInSection(section)
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -242,5 +254,20 @@ extension TrackersViewController: TrackerCellDelegate {
                 completionsCounter[tracker.id] = currentCount - 1
             }
         }
+    }
+}
+
+// MARK: - TrackerStoreDelegate
+extension TrackersViewController: TrackerStoreDelegate {
+    func didUpdate(_ update: TrackerStoreUpdate) {
+        collectionView.performBatchUpdates({
+            collectionView.insertItems(at: update.insertedIndices)
+            collectionView.deleteItems(at: update.deletedIndices)
+            collectionView.reloadItems(at: update.updatedIndices)
+            
+            for move in update.movedIndices {
+                collectionView.moveItem(at: move.from, to: move.to)
+            }
+        }, completion: nil)
     }
 }

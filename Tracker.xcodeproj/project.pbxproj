@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		8F1D68042C95D5BF0022DE36 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D68032C95D5BF0022DE36 /* DataController.swift */; };
 		8F1D68072C95D7690022DE36 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D68052C95D7690022DE36 /* Model.xcdatamodeld */; };
+		8F1D68092C95E3FA0022DE36 /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D68082C95E3FA0022DE36 /* TrackerStore.swift */; };
 		8F57F35C2C65D94300C2A926 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35B2C65D94300C2A926 /* TrackersViewController.swift */; };
 		8F57F35E2C65D99000C2A926 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35D2C65D99000C2A926 /* StatisticsViewController.swift */; };
 		8F57F3602C65D9B000C2A926 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35F2C65D9B000C2A926 /* TabBarController.swift */; };
@@ -45,6 +46,7 @@
 /* Begin PBXFileReference section */
 		8F1D68032C95D5BF0022DE36 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 		8F1D68062C95D7690022DE36 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		8F1D68082C95E3FA0022DE36 /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
 		8F57F35B2C65D94300C2A926 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		8F57F35D2C65D99000C2A926 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		8F57F35F2C65D9B000C2A926 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 		8F1D68022C95D56F0022DE36 /* Store */ = {
 			isa = PBXGroup;
 			children = (
+				8F1D68082C95E3FA0022DE36 /* TrackerStore.swift */,
 			);
 			path = Store;
 			sourceTree = "<group>";
@@ -345,6 +348,7 @@
 				8FE5CD942C8C45B1004CCEF7 /* GeometricParams.swift in Sources */,
 				8FE1641D2C69E09B00C1BFD3 /* TrackersStubView.swift in Sources */,
 				8FA387A02C84A3AB0044EC39 /* BaseTableView.swift in Sources */,
+				8F1D68092C95E3FA0022DE36 /* TrackerStore.swift in Sources */,
 				8F5CD44F2C648277003933B1 /* AppDelegate.swift in Sources */,
 				8FA387932C745F310044EC39 /* TrackerCell.swift in Sources */,
 				8FA387AC2C86DFE40044EC39 /* LinkCell.swift in Sources */,
