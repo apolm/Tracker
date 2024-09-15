@@ -50,7 +50,7 @@ final class TrackersViewController: UIViewController {
     }()
     
     private lazy var trackerStore: TrackerStoreProtocol = {
-        TrackerStore(delegate: self)
+        TrackerStore(delegate: self, for: currentDate)
     }()
     
     private var currentDate: Date = Date().startOfDay
@@ -89,6 +89,7 @@ final class TrackersViewController: UIViewController {
         
         setupConstraints()
         setupNavigationBar()
+        configureViewState()
         
         NotificationCenter.default.addObserver(self, selector: #selector(addNewTracker), name: TrackersViewController.notificationName, object: nil)
     }
@@ -109,6 +110,11 @@ final class TrackersViewController: UIViewController {
         ])
     }
     
+    private func configureViewState() {
+        collectionView.isHidden = trackerStore.isEmpty
+        stubView.isHidden = !trackerStore.isEmpty
+    }
+    
     private func setupNavigationBar() {
         navigationItem.leftBarButtonItem = addTrackerButton
         navigationItem.rightBarButtonItem = datePickerButton
@@ -121,8 +127,7 @@ final class TrackersViewController: UIViewController {
     @objc
     private func addNewTracker(_ notification: Notification) {
         guard let tracker = notification.object as? Tracker else { return }
-        allTrackers.append(tracker)
-        update()
+        trackerStore.addTracker(tracker)
     }
     
     private func update() {
@@ -169,17 +174,19 @@ final class TrackersViewController: UIViewController {
             datePicker.removeFromSuperview()
         }
         
-        update()
+        
     }
 }
 
 // MARK: - UICollectionViewDelegate
 extension TrackersViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView,
+                        viewForSupplementaryElementOfKind kind: String,
+                        at indexPath: IndexPath) -> UICollectionReusableView {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as? SectionHeader else {
             return UICollectionReusableView()
         }
-        view.config(with: categories[indexPath.section].name)
+        view.config(with: trackerStore.sectionName(for: indexPath.section))
         return view
     }
 }
@@ -190,18 +197,21 @@ extension TrackersViewController: UICollectionViewDataSource {
         return trackerStore.numberOfSections
     }
     
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView,
+                        numberOfItemsInSection section: Int) -> Int {
         return trackerStore.numberOfItemsInSection(section)
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
-        let tracker = categories[indexPath.section].trackers[indexPath.row]
-        cell.config(with: tracker,
-                    numberOfCompletions: completionsCounter[tracker.id] ?? 0,
-                    isCompleted: completedIds.contains(tracker.id),
+        let completionStatus = trackerStore.completionStatus(for: indexPath)
+        
+        cell.config(with: completionStatus.tracker,
+                    numberOfCompletions: completionStatus.numberOfCompletions,
+                    isCompleted: completionStatus.isCompleted,
                     completionIsEnabled: currentDate <= Date().startOfDay)
         cell.delegate = self
         return cell
@@ -224,15 +234,21 @@ extension TrackersViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: cellWidth, height: 148)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        insetForSectionAt section: Int) -> UIEdgeInsets {
         return UIEdgeInsets(top: layoutParams.topInset, left: layoutParams.leftInset, bottom: layoutParams.bottomInset, right: layoutParams.rightInset)
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         layoutParams.rowSpacing
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         layoutParams.columnSpacing
     }
 }
@@ -259,8 +275,27 @@ extension TrackersViewController: TrackerCellDelegate {
 
 // MARK: - TrackerStoreDelegate
 extension TrackersViewController: TrackerStoreDelegate {
+//    func didInsertSection(at sectionIndex: Int) {
+//        collectionView.performBatchUpdates({
+//            collectionView.insertSections(IndexSet(integer: sectionIndex))
+//        }, completion: nil)
+//    }
+//    
+//    func didDeleteSection(at sectionIndex: Int) {
+//        collectionView.performBatchUpdates({
+//            collectionView.deleteSections(IndexSet(integer: sectionIndex))
+//        }, completion: nil)
+//    }
+    
     func didUpdate(_ update: TrackerStoreUpdate) {
         collectionView.performBatchUpdates({
+            if !update.deletedSections.isEmpty {
+                collectionView.deleteSections(IndexSet(update.deletedSections))
+            }
+            if !update.insertedSections.isEmpty {
+                collectionView.insertSections(IndexSet(update.insertedSections))
+            }
+            
             collectionView.insertItems(at: update.insertedIndices)
             collectionView.deleteItems(at: update.deletedIndices)
             collectionView.reloadItems(at: update.updatedIndices)
@@ -269,5 +304,42 @@ extension TrackersViewController: TrackerStoreDelegate {
                 collectionView.moveItem(at: move.from, to: move.to)
             }
         }, completion: nil)
+        
+        configureViewState()
+    }
+}
+
+//TODO: -  Debug
+extension TrackersViewController {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        
+        let button1 = UIBarButtonItem(
+            image: UIImage(systemName: "1.circle"), style: .plain, target: self, action: #selector(debugButton1Tap))
+        button1.tintColor = .red
+        
+        let button2 = UIBarButtonItem(
+            image: UIImage(systemName: "2.circle"), style: .plain, target: self, action: #selector(debugButton2Tap))
+        button2.tintColor = .red
+        
+        navigationItem.leftBarButtonItems?.append(contentsOf: [button1, button2])
+    }
+    
+    @objc private func debugButton1Tap() {
+        let viewController = Test()
+        viewController.modalPresentationStyle = .formSheet
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .formSheet
+        present(navigationController, animated: true)
+    }
+    
+    @objc private func debugButton2Tap() {
+        let tracker = Tracker(id: UUID(),
+                              name: "Test1",
+                              color: UIColor(hex: "#007BFA") ?? .clear,
+                              emoji: "❤️",
+                              days: Set(arrayLiteral: Weekday.sunday))
+        trackerStore.addTracker(tracker)
     }
 }
