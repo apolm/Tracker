@@ -38,10 +38,10 @@ final class TrackersViewController: UIViewController {
         let collectionView = UICollectionView(frame: .zero,
                                               collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TrackerCell.self,
-                                forCellWithReuseIdentifier: cellIdentifier)
+                                forCellWithReuseIdentifier: Constants.cellIdentifier)
         collectionView.register(SectionHeader.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-                                withReuseIdentifier: headerIdentifier)
+                                withReuseIdentifier: Constants.headerIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
@@ -53,36 +53,58 @@ final class TrackersViewController: UIViewController {
         TrackerStore(delegate: self, for: currentDate)
     }()
     
+    private enum Constants {
+        static let cellIdentifier = "cell"
+        static let headerIdentifier = "header"
+    }
+    
     private var currentDate: Date = Date().startOfDay
-    
     static let notificationName = NSNotification.Name("AddNewTracker")
-    
-    private let cellIdentifier = "cell"
-    private let headerIdentifier = "header"
-    private let layoutParams = GeometricParams(columnCount: 2, rowCount: 0, leftInset: 16, rightInset: 16, topInset: 12, bottomInset: 16, columnSpacing: 10, rowSpacing: 0)
+    private let layoutParams = GeometricParams(
+        columnCount: 2,
+        rowCount: 0,
+        leftInset: 16,
+        rightInset: 16,
+        topInset: 12,
+        bottomInset: 16,
+        columnSpacing: 10,
+        rowSpacing: 0
+    )
     
     // MARK: - View Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .ypWhite
         
-        view.addSubview(stubView)
-        view.addSubview(UIView(frame: .zero))
-        view.addSubview(collectionView)
-        collectionView.isHidden = true
-        
+        setupViews()
         setupConstraints()
         setupNavigationBar()
         configureViewState()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(addNewTracker), name: TrackersViewController.notificationName, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(addNewTracker),
+            name: TrackersViewController.notificationName,
+            object: nil
+        )
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: TrackersViewController.notificationName, object: nil)
+        NotificationCenter.default.removeObserver(
+            self,
+            name: TrackersViewController.notificationName,
+            object: nil
+        )
     }
     
     // MARK: - Private Methods
+    private func setupViews() {
+        view.addSubview(stubView)
+        view.addSubview(UIView(frame: .zero))
+        view.addSubview(collectionView)
+        collectionView.isHidden = true
+    }
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             stubView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
@@ -140,7 +162,7 @@ extension TrackersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerIdentifier, for: indexPath) as? SectionHeader else {
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.headerIdentifier, for: indexPath) as? SectionHeader else {
             return UICollectionReusableView()
         }
         view.config(with: trackerStore.sectionName(for: indexPath.section))
@@ -161,7 +183,7 @@ extension TrackersViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as? TrackerCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Constants.cellIdentifier, for: indexPath) as? TrackerCell else {
             return UICollectionViewCell()
         }
         let completionStatus = trackerStore.completionStatus(for: indexPath)

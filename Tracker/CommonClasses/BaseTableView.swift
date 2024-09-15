@@ -43,17 +43,7 @@ final class BaseTable: UITableView, UITableViewDataSource, UITableViewDelegate {
         cell.backgroundColor = .ypBackground
         
         if indexPath.row != tableView.numberOfRows(inSection: indexPath.section) - 1 {
-            let separator = UIView()
-            separator.backgroundColor = .ypGray
-            separator.translatesAutoresizingMaskIntoConstraints = false
-            cell.contentView.addSubview(separator)
-            
-            NSLayoutConstraint.activate([
-                separator.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
-                separator.widthAnchor.constraint(equalToConstant: cell.frame.width - 32),
-                separator.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
-                separator.heightAnchor.constraint(equalToConstant: 0.5)
-            ])
+            addSeparator(to: cell)
         }
         
         if tableView.numberOfRows(inSection: indexPath.section) == 1 {
@@ -75,7 +65,21 @@ final class BaseTable: UITableView, UITableViewDataSource, UITableViewDelegate {
         
         return cell
     }
-
+    
+    private func addSeparator(to cell: UITableViewCell) {
+        let separator = UIView()
+        separator.backgroundColor = .ypGray
+        separator.translatesAutoresizingMaskIntoConstraints = false
+        cell.contentView.addSubview(separator)
+        
+        NSLayoutConstraint.activate([
+            separator.leadingAnchor.constraint(equalTo: cell.contentView.leadingAnchor, constant: 16),
+            separator.widthAnchor.constraint(equalToConstant: cell.frame.width - 32),
+            separator.bottomAnchor.constraint(equalTo: cell.contentView.bottomAnchor),
+            separator.heightAnchor.constraint(equalToConstant: 0.5)
+        ])
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 24
     }

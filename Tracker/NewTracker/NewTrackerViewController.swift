@@ -112,19 +112,10 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        contentView.addSubview(tableView)
-        contentView.addSubview(collectionView)
-        contentView.addSubview(cancelButton)
-        contentView.addSubview(createButton)
-        scrollView.addSubview(contentView)
-        view.addSubview(scrollView)
-        
+        setupViews()
         setupConstraints()
         configureViewState()
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGesture.cancelsTouchesInView = false
-        view.addGestureRecognizer(tapGesture)
+        addHideKeyboardTapGesture()
         
         title = isRegular ? "Новая привычка" : "Новое нерегулярное событие"
     }
@@ -140,6 +131,15 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     }
     
     // MARK: - Private Methods
+    private func setupViews() {
+        contentView.addSubview(tableView)
+        contentView.addSubview(collectionView)
+        contentView.addSubview(cancelButton)
+        contentView.addSubview(createButton)
+        scrollView.addSubview(contentView)
+        view.addSubview(scrollView)
+    }
+    
     private func setupConstraints() {
         let sectionHeight = cellSize * CGFloat(sectionLayout.rowCount) + sectionLayout.totalInsetHeight + Constants.headerHeight
         let totalCollectionHeight = sectionHeight * 2 + Constants.footerHeight
@@ -191,6 +191,12 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
             !emoji.isEmpty
     }
     
+    private func addHideKeyboardTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
     // MARK: - Actions
     @objc private func cancelButtonDidTap() {
         self.dismiss(animated: true)
@@ -238,40 +244,48 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
     func cellForRowAt(_ tableView: UITableView, indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.textCellID, for: indexPath) as? TextCell else {
-                return UITableViewCell()
-            }
-            cell.onTextChange = { [weak self] text in
-                self?.name = text
-                self?.configureViewState()
-            }
-            return cell
+            return dequeueAndConfigureTextCell(from: tableView, for: indexPath)
             
         case 1:
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.linkCellID, for: indexPath) as? LinkCell else {
-                return UITableViewCell()
-            }
-            if indexPath.row == 0 {
-                cell.configure(title: "Категория", caption: "Общая категория")
-            } else if indexPath.row == 1 {
-                var caption = ""
-                if let days {
-                    if days.count == Weekday.allCases.count {
-                        caption = "Каждый день"
-                    } else {
-                        caption = Weekday.orderedWeekdays()
-                            .filter{ days.contains($0) }
-                            .map{ $0.shortName }
-                            .joined(separator: ", ")
-                    }
-                }
-                cell.configure(title: "Расписание", caption: caption)
-            }
-            return cell
+            return dequeueAndConfigureLinkCell(from: tableView, for: indexPath)
             
         default:
             return UITableViewCell()
         }
+    }
+    
+    private func dequeueAndConfigureTextCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.textCellID, for: indexPath) as? TextCell else {
+            return UITableViewCell()
+        }
+        cell.onTextChange = { [weak self] text in
+            self?.name = text
+            self?.configureViewState()
+        }
+        return cell
+    }
+    
+    private func dequeueAndConfigureLinkCell(from tableView: UITableView, for indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.linkCellID, for: indexPath) as? LinkCell else {
+            return UITableViewCell()
+        }
+        if indexPath.row == 0 {
+            cell.configure(title: "Категория", caption: "Общая категория")
+        } else if indexPath.row == 1 {
+            var caption = ""
+            if let days {
+                if days.count == Weekday.allCases.count {
+                    caption = "Каждый день"
+                } else {
+                    caption = Weekday.orderedWeekdays()
+                        .filter{ days.contains($0) }
+                        .map{ $0.shortName }
+                        .joined(separator: ", ")
+                }
+            }
+            cell.configure(title: "Расписание", caption: caption)
+        }
+        return cell
     }
     
     func didSelectRowAt(indexPath: IndexPath) {
