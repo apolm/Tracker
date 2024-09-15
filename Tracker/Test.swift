@@ -111,13 +111,16 @@ final class Test: AddTrackerFlowViewController {
     }
             
     @objc private func clearTapped() {
+        let fetchRequestRecords: NSFetchRequest<NSFetchRequestResult> = TrackerRecordCoreData.fetchRequest()
         let fetchRequestTrackers: NSFetchRequest<NSFetchRequestResult> = TrackerCoreData.fetchRequest()
         let fetchRequestCategories: NSFetchRequest<NSFetchRequestResult> = TrackerCategoryCoreData.fetchRequest()
-                
+        
+        let batchDeleteRequestRecords = NSBatchDeleteRequest(fetchRequest: fetchRequestRecords)
         let batchDeleteRequestTrackers = NSBatchDeleteRequest(fetchRequest: fetchRequestTrackers)
         let batchDeleteRequestCategories = NSBatchDeleteRequest(fetchRequest: fetchRequestCategories)
                 
         do {
+            try DataController.shared.context.execute(batchDeleteRequestRecords)
             try DataController.shared.context.execute(batchDeleteRequestTrackers)
             try DataController.shared.context.execute(batchDeleteRequestCategories)
                         

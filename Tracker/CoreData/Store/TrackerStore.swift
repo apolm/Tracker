@@ -32,6 +32,7 @@ protocol TrackerStoreProtocol {
     
     func completionStatus(for indexPath: IndexPath) -> TrackerCompletion
     func updateDate(_ newDate: Date)
+    func changeCompletion(for indexPath: IndexPath, to isCompleted: Bool)
 }
 
 final class TrackerStore: NSObject {
@@ -173,6 +174,31 @@ extension TrackerStore: TrackerStoreProtocol {
         
         fetchedResultsController.fetchRequest.predicate = fetchPredicate()
         try? fetchedResultsController.performFetch()
+    }
+    
+    func changeCompletion(for indexPath: IndexPath, to isCompleted: Bool) {
+        let trackerCoreData = fetchedResultsController.object(at: indexPath)
+        
+        let existingRecord = trackerCoreData.records?.first { record in
+            if let trackerRecord = record as? TrackerRecordCoreData,
+               let trackerDate = trackerRecord.date {
+                return trackerDate == date
+            } else {
+                return false
+            }
+        }
+        
+        if isCompleted && existingRecord == nil {
+            let trackerRecordCoreData = TrackerRecordCoreData(context: context)
+            trackerRecordCoreData.date = date
+            trackerRecordCoreData.tracker = trackerCoreData
+            
+            dataController.saveContext()
+        } else if !isCompleted,
+                  let trackerRecordCoreData = existingRecord as? TrackerRecordCoreData {
+            context.delete(trackerRecordCoreData)
+            dataController.saveContext()
+        }
     }
 }
 
