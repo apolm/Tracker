@@ -54,22 +54,6 @@ final class TrackersViewController: UIViewController {
     }()
     
     private var currentDate: Date = Date().startOfDay
-
-// TODO: - REMOVE ++
-// ----------------------------------------------------------------------------------------------------
-
-    private var categories: [TrackerCategory] = []
-    private var completedTrackers: [TrackerRecord] = []
-    
-    // Helpers
-    private var completedIds: Set<UUID> = [] // Trackers completed in current date
-    
-    // Temp (before CoreData)
-    private var allTrackers: [Tracker] = [] // All created trackers
-    private var completionsCounter: [UUID: Int] = [:] // Number of tracker completions
-
-// ----------------------------------------------------------------------------------------------------
-// TODO: - REMOVE --
     
     static let notificationName = NSNotification.Name("AddNewTracker")
     
@@ -128,35 +112,6 @@ final class TrackersViewController: UIViewController {
     private func addNewTracker(_ notification: Notification) {
         guard let tracker = notification.object as? Tracker else { return }
         trackerStore.addTracker(tracker)
-    }
-    
-    private func update() {
-        let completedIrregulars = Set(
-            allTrackers.filter { tracker in
-                !tracker.isRegular &&
-                completedTrackers.first { $0.trackerId == tracker.id } != nil
-            }
-        )
-        completedIds = Set(
-            completedTrackers
-                .filter { Calendar.current.isDate($0.date, inSameDayAs: currentDate) }
-                .map { $0.trackerId }
-        )
-        
-        let weekday = Weekday(date: currentDate)
-        let selectedTrackers = allTrackers.filter { tracker in
-            if let days = tracker.days {
-                return days.contains(weekday)
-            } else {
-                return completedIds.contains(tracker.id) || !completedIrregulars.contains(tracker)
-            }
-        }
-        categories = selectedTrackers.isEmpty ? [] : [TrackerCategory(name: "Общая категория", trackers: selectedTrackers)]
-        
-        collectionView.reloadData()
-        
-        collectionView.isHidden = selectedTrackers.isEmpty
-        stubView.isHidden = !selectedTrackers.isEmpty
     }
     
     // MARK: - Actions
