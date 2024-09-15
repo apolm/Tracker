@@ -263,38 +263,3 @@ extension TrackersViewController: TrackerStoreDelegate {
         configureViewState()
     }
 }
-
-//TODO: -  Debug
-extension TrackersViewController {
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
-        let button1 = UIBarButtonItem(
-            image: UIImage(systemName: "1.circle"), style: .plain, target: self, action: #selector(debugButton1Tap))
-        button1.tintColor = .red
-        
-        let button2 = UIBarButtonItem(
-            image: UIImage(systemName: "2.circle"), style: .plain, target: self, action: #selector(debugButton2Tap))
-        button2.tintColor = .red
-        
-        navigationItem.leftBarButtonItems?.append(contentsOf: [button1, button2])
-    }
-    
-    @objc private func debugButton1Tap() {
-        let viewController = Test()
-        viewController.modalPresentationStyle = .formSheet
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.modalPresentationStyle = .formSheet
-        present(navigationController, animated: true)
-    }
-    
-    @objc private func debugButton2Tap() {
-        let tracker = Tracker(id: UUID(),
-                              name: "Test1",
-                              color: UIColor(hex: "#007BFA") ?? .clear,
-                              emoji: "❤️",
-                              days: Set(arrayLiteral: Weekday.sunday))
-        trackerStore.addTracker(tracker)
-    }
-}

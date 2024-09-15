@@ -20,7 +20,6 @@
 		8F5CD4512C648277003933B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5CD4502C648277003933B1 /* SceneDelegate.swift */; };
 		8F5CD4582C648279003933B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F5CD4572C648279003933B1 /* Assets.xcassets */; };
 		8F5CD45B2C648279003933B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F5CD4592C648279003933B1 /* LaunchScreen.storyboard */; };
-		8F864B0F2C8D6FA80053D953 /* Test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B0E2C8D6FA80053D953 /* Test.swift */; };
 		8F864B162C9003940053D953 /* SelectableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B152C9003940053D953 /* SelectableCell.swift */; };
 		8F864B182C900D3C0053D953 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B172C900D3C0053D953 /* UIColor+Extensions.swift */; };
 		8F864B1A2C9014DF0053D953 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B192C9014DF0053D953 /* EmojiCell.swift */; };
@@ -62,7 +61,6 @@
 		8F5CD4572C648279003933B1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F5CD45A2C648279003933B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F5CD45C2C648279003933B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8F864B0E2C8D6FA80053D953 /* Test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Test.swift; sourceTree = "<group>"; };
 		8F864B152C9003940053D953 /* SelectableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableCell.swift; sourceTree = "<group>"; };
 		8F864B172C900D3C0053D953 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		8F864B192C9014DF0053D953 /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
@@ -186,7 +184,6 @@
 				8F57F3582C65D8AB00C2A926 /* TabBarController */,
 				8FD031AC2C70E89000D3AD11 /* Helpers */,
 				8F864B142C9002C40053D953 /* CollectionViewHelpers */,
-				8F864B0E2C8D6FA80053D953 /* Test.swift */,
 			);
 			path = Tracker;
 			sourceTree = "<group>";
@@ -382,7 +379,6 @@
 				8FA387A32C84B7140044EC39 /* ScheduleCell.swift in Sources */,
 				8F1D68042C95D5BF0022DE36 /* DataController.swift in Sources */,
 				8F1D680F2C9758620022DE36 /* TrackerRecordStore.swift in Sources */,
-				8F864B0F2C8D6FA80053D953 /* Test.swift in Sources */,
 				8FA3879C2C7E52CF0044EC39 /* NewTrackerViewController.swift in Sources */,
 				8F864B182C900D3C0053D953 /* UIColor+Extensions.swift in Sources */,
 				8FA387A82C86CBC20044EC39 /* ActionButton.swift in Sources */,
