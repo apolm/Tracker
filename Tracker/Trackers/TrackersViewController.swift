@@ -174,7 +174,9 @@ final class TrackersViewController: UIViewController {
             datePicker.removeFromSuperview()
         }
         
-        
+        trackerStore.updateDate(currentDate)
+        collectionView.reloadData()
+        configureViewState()
     }
 }
 
@@ -275,18 +277,6 @@ extension TrackersViewController: TrackerCellDelegate {
 
 // MARK: - TrackerStoreDelegate
 extension TrackersViewController: TrackerStoreDelegate {
-//    func didInsertSection(at sectionIndex: Int) {
-//        collectionView.performBatchUpdates({
-//            collectionView.insertSections(IndexSet(integer: sectionIndex))
-//        }, completion: nil)
-//    }
-//    
-//    func didDeleteSection(at sectionIndex: Int) {
-//        collectionView.performBatchUpdates({
-//            collectionView.deleteSections(IndexSet(integer: sectionIndex))
-//        }, completion: nil)
-//    }
-    
     func didUpdate(_ update: TrackerStoreUpdate) {
         collectionView.performBatchUpdates({
             if !update.deletedSections.isEmpty {
