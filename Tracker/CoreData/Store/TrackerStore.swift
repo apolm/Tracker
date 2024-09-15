@@ -28,7 +28,6 @@ protocol TrackerStoreProtocol {
     func sectionName(for section: Int) -> String
     
     func addTracker(_ tracker: Tracker)
-    func deleteTracker(at indexPath: IndexPath)
     
     func completionStatus(for indexPath: IndexPath) -> TrackerCompletion
     func updateDate(_ newDate: Date)
@@ -143,10 +142,6 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerCoreData.category = category
         
         dataController.saveContext()
-    }
-    
-    func deleteTracker(at indexPath: IndexPath) {
-        
     }
     
     func completionStatus(for indexPath: IndexPath) -> TrackerCompletion {
