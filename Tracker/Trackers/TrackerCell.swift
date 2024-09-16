@@ -151,14 +151,7 @@ final class TrackerCell: UICollectionViewCell {
     // MARK: - Actions
     @objc
     private func completeButtonDidTap() {
-        if isCompleted {
-            numberOfCompletions -= 1
-        } else {
-            numberOfCompletions += 1
-        }
         isCompleted.toggle()
-        configureViewState()
-        
         delegate?.trackerCellDidChangeCompletion(for: self, to: isCompleted)
     }
 }
