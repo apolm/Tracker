@@ -1,4 +1,3 @@
-import UIKit
 import CoreData
 
 protocol TrackerRecordStoreProtocol {

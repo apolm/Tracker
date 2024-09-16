@@ -15,7 +15,16 @@ struct GeometricParams {
     let totalInsetWidth: CGFloat
     let totalInsetHeight: CGFloat
     
-    init(columnCount: Int, rowCount: Int, leftInset: CGFloat, rightInset: CGFloat, topInset: CGFloat, bottomInset: CGFloat, columnSpacing: CGFloat, rowSpacing: CGFloat) {
+    init(
+        columnCount: Int,
+        rowCount: Int,
+        leftInset: CGFloat,
+        rightInset: CGFloat,
+        topInset: CGFloat,
+        bottomInset: CGFloat,
+        columnSpacing: CGFloat,
+        rowSpacing: CGFloat
+    ) {
         self.columnCount = columnCount
         self.rowCount = rowCount
         
