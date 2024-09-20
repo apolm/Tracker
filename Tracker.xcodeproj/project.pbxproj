@@ -43,6 +43,9 @@
 		8FE5CD922C8C3675004CCEF7 /* TrackerCellDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5CD912C8C3675004CCEF7 /* TrackerCellDelegate.swift */; };
 		8FE5CD942C8C45B1004CCEF7 /* GeometricParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5CD932C8C45B1004CCEF7 /* GeometricParams.swift */; };
 		8FE5CD962C8C9CB6004CCEF7 /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FE5CD952C8C9CB6004CCEF7 /* Date+Extensions.swift */; };
+		8FF6A4432C9DAB8C00CA8CA8 /* OnboardingPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF6A4422C9DAB8C00CA8CA8 /* OnboardingPage.swift */; };
+		8FF6A4452C9DCDE200CA8CA8 /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF6A4442C9DCDE200CA8CA8 /* OnboardingViewController.swift */; };
+		8FF6A4492C9E122600CA8CA8 /* UserDefaults+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FF6A4482C9E122600CA8CA8 /* UserDefaults+Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -84,6 +87,9 @@
 		8FE5CD912C8C3675004CCEF7 /* TrackerCellDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCellDelegate.swift; sourceTree = "<group>"; };
 		8FE5CD932C8C45B1004CCEF7 /* GeometricParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeometricParams.swift; sourceTree = "<group>"; };
 		8FE5CD952C8C9CB6004CCEF7 /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
+		8FF6A4422C9DAB8C00CA8CA8 /* OnboardingPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPage.swift; sourceTree = "<group>"; };
+		8FF6A4442C9DCDE200CA8CA8 /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		8FF6A4482C9E122600CA8CA8 /* UserDefaults+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,10 +185,11 @@
 				8F57F35A2C65D8CC00C2A926 /* Statistics */,
 				8F57F3592C65D8BB00C2A926 /* Trackers */,
 				8FA387962C7D99160044EC39 /* NewTracker */,
+				8FF6A4412C9DAB4200CA8CA8 /* Onboarding */,
 				8F1D68002C95D53B0022DE36 /* CoreData */,
-				8FA387A42C858AED0044EC39 /* CommonClasses */,
+				8FA387A42C858AED0044EC39 /* CommonObjects */,
 				8F57F3582C65D8AB00C2A926 /* TabBarController */,
-				8FD031AC2C70E89000D3AD11 /* Helpers */,
+				8FD031AC2C70E89000D3AD11 /* Extensions */,
 				8F864B142C9002C40053D953 /* CollectionViewHelpers */,
 			);
 			path = Tracker;
@@ -217,14 +224,16 @@
 			path = Schedule;
 			sourceTree = "<group>";
 		};
-		8FA387A42C858AED0044EC39 /* CommonClasses */ = {
+		8FA387A42C858AED0044EC39 /* CommonObjects */ = {
 			isa = PBXGroup;
 			children = (
 				8FA387A72C86CBC20044EC39 /* ActionButton.swift */,
 				8FA387992C7DA7EC0044EC39 /* AddTrackerFlowViewController.swift */,
 				8FA3879F2C84A3AB0044EC39 /* BaseTableView.swift */,
+				8FE5CD932C8C45B1004CCEF7 /* GeometricParams.swift */,
+				8FD031AD2C70E8BB00D3AD11 /* Weekday.swift */,
 			);
-			path = CommonClasses;
+			path = CommonObjects;
 			sourceTree = "<group>";
 		};
 		8FA387AD2C8988F70044EC39 /* Cells */ = {
@@ -248,16 +257,15 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
-		8FD031AC2C70E89000D3AD11 /* Helpers */ = {
+		8FD031AC2C70E89000D3AD11 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
 				8FE5CD952C8C9CB6004CCEF7 /* Date+Extensions.swift */,
-				8FE5CD932C8C45B1004CCEF7 /* GeometricParams.swift */,
 				8F1D680A2C9621F40022DE36 /* Set+Extensions.swift */,
 				8F864B172C900D3C0053D953 /* UIColor+Extensions.swift */,
-				8FD031AD2C70E8BB00D3AD11 /* Weekday.swift */,
+				8FF6A4482C9E122600CA8CA8 /* UserDefaults+Extensions.swift */,
 			);
-			path = Helpers;
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 		8FDE4E4F2C6498A700D7BA8A /* Resources */ = {
@@ -275,6 +283,15 @@
 				8F5CD4592C648279003933B1 /* LaunchScreen.storyboard */,
 			);
 			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
+		8FF6A4412C9DAB4200CA8CA8 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				8FF6A4442C9DCDE200CA8CA8 /* OnboardingViewController.swift */,
+				8FF6A4422C9DAB8C00CA8CA8 /* OnboardingPage.swift */,
+			);
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -355,6 +372,7 @@
 				8F1D680D2C9752B10022DE36 /* TrackerCategoryStore.swift in Sources */,
 				8FE1641D2C69E09B00C1BFD3 /* TrackersStubView.swift in Sources */,
 				8FA387A02C84A3AB0044EC39 /* BaseTableView.swift in Sources */,
+				8FF6A4452C9DCDE200CA8CA8 /* OnboardingViewController.swift in Sources */,
 				8F1D680B2C9621F40022DE36 /* Set+Extensions.swift in Sources */,
 				8F1D68092C95E3FA0022DE36 /* TrackerStore.swift in Sources */,
 				8F5CD44F2C648277003933B1 /* AppDelegate.swift in Sources */,
@@ -367,12 +385,14 @@
 				8FD031AB2C70E85600D3AD11 /* TrackerRecord.swift in Sources */,
 				8FD031A72C70DE0500D3AD11 /* Tracker.swift in Sources */,
 				8F864B162C9003940053D953 /* SelectableCell.swift in Sources */,
+				8FF6A4432C9DAB8C00CA8CA8 /* OnboardingPage.swift in Sources */,
 				8F57F35C2C65D94300C2A926 /* TrackersViewController.swift in Sources */,
 				8FD031AE2C70E8BB00D3AD11 /* Weekday.swift in Sources */,
 				8FA3879A2C7DA7EC0044EC39 /* AddTrackerFlowViewController.swift in Sources */,
 				8FE5CD962C8C9CB6004CCEF7 /* Date+Extensions.swift in Sources */,
 				8F1D68072C95D7690022DE36 /* Model.xcdatamodeld in Sources */,
 				8FE5CD922C8C3675004CCEF7 /* TrackerCellDelegate.swift in Sources */,
+				8FF6A4492C9E122600CA8CA8 /* UserDefaults+Extensions.swift in Sources */,
 				8F864B1C2C9015070053D953 /* ColorCell.swift in Sources */,
 				8F5CD4512C648277003933B1 /* SceneDelegate.swift in Sources */,
 				8F864B1A2C9014DF0053D953 /* EmojiCell.swift in Sources */,
