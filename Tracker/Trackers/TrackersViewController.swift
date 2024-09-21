@@ -29,7 +29,7 @@ final class TrackersViewController: UIViewController {
     }()
     
     private lazy var stubView: UIView = {
-        let stubView = TrackersStubView()
+        let stubView = StubView(frame: .zero, caption: "Что будем отслеживать?")
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()

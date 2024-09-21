@@ -1,6 +1,6 @@
 import UIKit
 
-final class TrackersStubView: UIView {
+final class StubView: UIView {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "StarEmoji")
@@ -11,15 +11,17 @@ final class TrackersStubView: UIView {
     
     private lazy var label: UILabel = {
         let label = UILabel()
-        label.text = "Что будем отслеживать?"
         label.textColor = .ypBlack
-        label.font = .systemFont(ofSize: 12)
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 12, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    override init(frame: CGRect) {
+    init(frame: CGRect, caption: String) {
         super.init(frame: frame)
+        label.text = caption
         setupView()
     }
     
@@ -36,11 +38,10 @@ final class TrackersStubView: UIView {
             imageView.heightAnchor.constraint(equalToConstant: 80),
             imageView.widthAnchor.constraint(equalToConstant: 80),
             imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            imageView.topAnchor.constraint(equalTo: self.topAnchor),
+            imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor),
 
             label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
-            label.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            label.bottomAnchor.constraint(equalTo: self.bottomAnchor)
+            label.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
     }
 }

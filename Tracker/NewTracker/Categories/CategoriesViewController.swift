@@ -16,6 +16,16 @@ final class CategoriesViewController: AddTrackerFlowViewController {
         ActionButton(title: "Добавить категорию", target: self, action: #selector(addCategoryButtonDidTap))
     }()
     
+    private lazy var stubView: UIView = {
+        let caption = """
+        Привычки и события можно
+        объединить по смыслу
+        """
+        let stubView = StubView(frame: .zero, caption: caption)
+        stubView.translatesAutoresizingMaskIntoConstraints = false
+        return stubView
+    }()
+    
     private let currentCategory: String
     
     private enum Constants {
@@ -39,18 +49,24 @@ final class CategoriesViewController: AddTrackerFlowViewController {
         setupViews()
         setupConstraints()
         setupBindings()
+        configureViewState()
         
         title = "Категория"
     }
     
     // MARK: - Private Methods
     private func setupViews() {
+        view.addSubview(stubView)
         view.addSubview(tableView)
         view.addSubview(addCategoryButton)
     }
     
     private func setupConstraints() {
         NSLayoutConstraint.activate([
+            stubView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            stubView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            stubView.bottomAnchor.constraint(equalTo: addCategoryButton.topAnchor, constant: -16),
+            
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -67,7 +83,13 @@ final class CategoriesViewController: AddTrackerFlowViewController {
         viewModel.onDataChanged = { [weak self] in
             guard let self else { return }
             tableView.reloadData()
+            configureViewState()
         }
+    }
+    
+    private func configureViewState() {
+        tableView.isHidden = viewModel.categoriesIsEmpty
+        stubView.isHidden = !viewModel.categoriesIsEmpty
     }
     
     // MARK: - Actions
