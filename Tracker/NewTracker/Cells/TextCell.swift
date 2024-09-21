@@ -1,11 +1,10 @@
 import UIKit
 
 final class TextCell: UITableViewCell {
-    var onTextChange: ((String) -> Void)?
+    private var onTextChange: ((String) -> Void)?
     
     private lazy var textField: UITextField = {
         let textField = UITextField()
-        textField.placeholder = "Введите название трекера"
         textField.font = .systemFont(ofSize: 17, weight: .regular)
         textField.clearButtonMode = .whileEditing
         textField.borderStyle = .none
@@ -34,6 +33,11 @@ final class TextCell: UITableViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(placeholder: String, onTextChange: @escaping (String) -> Void) {
+        textField.placeholder = placeholder
+        self.onTextChange = onTextChange
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {

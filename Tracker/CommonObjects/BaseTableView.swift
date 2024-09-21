@@ -46,23 +46,24 @@ final class BaseTable: UITableView, UITableViewDataSource, UITableViewDelegate {
             addSeparator(to: cell)
         }
         
-        if tableView.numberOfRows(inSection: indexPath.section) == 1 {
+        cell.layer.cornerRadius = 0
+        cell.layer.masksToBounds = false
+        cell.layer.maskedCorners = []
+        
+        if indexPath.row == 0 {
             cell.layer.cornerRadius = 16
             cell.layer.masksToBounds = true
-        } else {
-            if indexPath.row == 0 {
-                cell.layer.cornerRadius = 16
-                cell.layer.masksToBounds = true
-                cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            }
-            
-            if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
-                cell.layer.cornerRadius = 16
-                cell.layer.masksToBounds = true
-                cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
-            }
+            cell.layer.maskedCorners.insert(.layerMinXMinYCorner)
+            cell.layer.maskedCorners.insert(.layerMaxXMinYCorner)
         }
         
+        if indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1 {
+            cell.layer.cornerRadius = 16
+            cell.layer.masksToBounds = true
+            cell.layer.maskedCorners.insert(.layerMinXMaxYCorner)
+            cell.layer.maskedCorners.insert(.layerMaxXMaxYCorner)
+        }
+
         return cell
     }
     
