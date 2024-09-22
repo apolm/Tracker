@@ -13,6 +13,7 @@
 		8F1D680B2C9621F40022DE36 /* Set+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D680A2C9621F40022DE36 /* Set+Extensions.swift */; };
 		8F1D680D2C9752B10022DE36 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D680C2C9752B10022DE36 /* TrackerCategoryStore.swift */; };
 		8F1D680F2C9758620022DE36 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D680E2C9758620022DE36 /* TrackerRecordStore.swift */; };
+		8F341BE32CA01D9000FB103A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F341BE52CA01D9000FB103A /* Localizable.strings */; };
 		8F57F35C2C65D94300C2A926 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35B2C65D94300C2A926 /* TrackersViewController.swift */; };
 		8F57F35E2C65D99000C2A926 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35D2C65D99000C2A926 /* StatisticsViewController.swift */; };
 		8F57F3602C65D9B000C2A926 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35F2C65D9B000C2A926 /* TabBarController.swift */; };
@@ -20,6 +21,7 @@
 		8F5CD4512C648277003933B1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5CD4502C648277003933B1 /* SceneDelegate.swift */; };
 		8F5CD4582C648279003933B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F5CD4572C648279003933B1 /* Assets.xcassets */; };
 		8F5CD45B2C648279003933B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F5CD4592C648279003933B1 /* LaunchScreen.storyboard */; };
+		8F7C14142CA04DAA002983E6 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 8F7C14162CA04DAA002983E6 /* Localizable.stringsdict */; };
 		8F864B162C9003940053D953 /* SelectableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B152C9003940053D953 /* SelectableCell.swift */; };
 		8F864B182C900D3C0053D953 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B172C900D3C0053D953 /* UIColor+Extensions.swift */; };
 		8F864B1A2C9014DF0053D953 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B192C9014DF0053D953 /* EmojiCell.swift */; };
@@ -59,6 +61,9 @@
 		8F1D680A2C9621F40022DE36 /* Set+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Set+Extensions.swift"; sourceTree = "<group>"; };
 		8F1D680C2C9752B10022DE36 /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 		8F1D680E2C9758620022DE36 /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
+		8F341BE42CA01D9000FB103A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8F341BE62CA01D9500FB103A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8F341BE72CA048FC00FB103A /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8F57F35B2C65D94300C2A926 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		8F57F35D2C65D99000C2A926 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		8F57F35F2C65D9B000C2A926 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -68,6 +73,9 @@
 		8F5CD4572C648279003933B1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		8F5CD45A2C648279003933B1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8F5CD45C2C648279003933B1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8F7C14152CA04DAA002983E6 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		8F7C14172CA04DAC002983E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		8F7C14182CA04DAD002983E6 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		8F864B152C9003940053D953 /* SelectableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableCell.swift; sourceTree = "<group>"; };
 		8F864B172C900D3C0053D953 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		8F864B192C9014DF0053D953 /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
@@ -282,6 +290,8 @@
 			children = (
 				8F5CD4572C648279003933B1 /* Assets.xcassets */,
 				8F5CD45C2C648279003933B1 /* Info.plist */,
+				8F341BE52CA01D9000FB103A /* Localizable.strings */,
+				8F7C14162CA04DAA002983E6 /* Localizable.stringsdict */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -357,6 +367,7 @@
 				ru,
 				en,
 				Base,
+				it,
 			);
 			mainGroup = 8F5CD4422C648277003933B1;
 			productRefGroup = 8F5CD44C2C648277003933B1 /* Products */;
@@ -374,6 +385,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F5CD45B2C648279003933B1 /* LaunchScreen.storyboard in Resources */,
+				8F7C14142CA04DAA002983E6 /* Localizable.stringsdict in Resources */,
+				8F341BE32CA01D9000FB103A /* Localizable.strings in Resources */,
 				8F5CD4582C648279003933B1 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -432,12 +445,32 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		8F341BE52CA01D9000FB103A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8F341BE42CA01D9000FB103A /* ru */,
+				8F341BE62CA01D9500FB103A /* en */,
+				8F341BE72CA048FC00FB103A /* it */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
 		8F5CD4592C648279003933B1 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				8F5CD45A2C648279003933B1 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8F7C14162CA04DAA002983E6 /* Localizable.stringsdict */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8F7C14152CA04DAA002983E6 /* ru */,
+				8F7C14172CA04DAC002983E6 /* en */,
+				8F7C14182CA04DAD002983E6 /* it */,
+			);
+			name = Localizable.stringsdict;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

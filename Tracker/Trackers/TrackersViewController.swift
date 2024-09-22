@@ -24,12 +24,17 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
-        searchController.searchBar.placeholder = "Поиск"
+        searchController.searchBar.placeholder = NSLocalizedString(
+            "searchController.searchBar.placeholder",
+            comment: "Placeholder for the search bar"
+        )
         return searchController
     }()
     
     private lazy var stubView: UIView = {
-        let stubView = StubView(frame: .zero, caption: "Что будем отслеживать?")
+        let caption = NSLocalizedString("trackers.stubView.caption",
+                                        comment: "Caption for the stub view when there are no items to track")
+        let stubView = StubView(frame: .zero, caption: caption)
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()
@@ -127,7 +132,7 @@ final class TrackersViewController: UIViewController {
         navigationItem.searchController = searchController
         
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "Трекеры"
+        title = NSLocalizedString("trackers.tabBarItem.title", comment: "Title for the Trackers tab")
     }
     
     @objc
