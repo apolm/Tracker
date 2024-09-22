@@ -6,7 +6,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = TabBarController()
+        
+        if UserDefaults.standard.hasCompletedOnboarding {
+            window?.rootViewController = TabBarController()
+        } else {
+            window?.rootViewController = OnboardingViewController(transitionStyle: .scroll,
+                                                                  navigationOrientation: .horizontal)
+        }
+        
         window?.makeKeyAndVisible()
     }
 

@@ -63,6 +63,7 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     
     private let isRegular: Bool
     private var name: String = ""
+    private var categoryName: String = ""
     private var color = UIColor.clear
     private var emoji = ""
     private var days: Set<Weekday>?
@@ -185,6 +186,7 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     private func configureViewState() {
         let daysAreValid = days?.isEmpty == false || !isRegular
         createButton.isEnabled = 
+            !categoryName.isEmpty && 
             !name.isEmpty &&
             daysAreValid &&
             color != .clear &&
@@ -204,7 +206,8 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     
     @objc private func createButtonDidTap() {
         let tracker = Tracker(id: UUID(), name: name, color: color, emoji: emoji, days: days)
-        NotificationCenter.default.post(name: TrackersViewController.notificationName, object: tracker)
+        let category = TrackerCategory(name: categoryName, trackers: [tracker])
+        NotificationCenter.default.post(name: TrackersViewController.notificationName, object: category)
         self.dismiss(animated: true)
     }
     
@@ -258,7 +261,7 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.textCellID, for: indexPath) as? TextCell else {
             return UITableViewCell()
         }
-        cell.onTextChange = { [weak self] text in
+        cell.configure(placeholder: "Введите название трекера") { [weak self] text in
             self?.name = text
             self?.configureViewState()
         }
@@ -270,7 +273,7 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
             return UITableViewCell()
         }
         if indexPath.row == 0 {
-            cell.configure(title: "Категория", caption: "Общая категория")
+            cell.configure(title: "Категория", caption: categoryName)
         } else if indexPath.row == 1 {
             var caption = ""
             if let days {
@@ -289,7 +292,12 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
     }
     
     func didSelectRowAt(indexPath: IndexPath) {
-        if indexPath.section == 1 && indexPath.row == 1 {
+        if indexPath.section == 1 && indexPath.row == 0 {
+            let viewModel = CategoriesViewModel()
+            viewModel.delegate = self
+            let viewController = CategoriesViewController(viewModel: viewModel, currentCategory: categoryName)
+            navigationController?.pushViewController(viewController, animated: true)
+        } else if indexPath.section == 1 && indexPath.row == 1 {
             let viewController = ScheduleViewController(days: days)
             viewController.onCompletion = { [weak self] result in
                 self?.days = result
@@ -421,5 +429,16 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
                         layout collectionViewLayout: UICollectionViewLayout,
                         minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         sectionLayout.columnSpacing
+    }
+}
+
+// MARK: - CategorySelectionDelegate
+extension NewTrackerViewController: CategorySelectionDelegate {
+    func didSelectCategory(_ name: String) {
+        categoryName = name
+        tableView.reloadData()
+        configureViewState()
+        
+        navigationController?.popViewController(animated: true)
     }
 }

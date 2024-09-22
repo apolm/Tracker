@@ -27,7 +27,7 @@ protocol TrackerStoreProtocol {
     func numberOfItemsInSection(_ section: Int) -> Int
     func sectionName(for section: Int) -> String
     
-    func addTracker(_ tracker: Tracker)
+    func addTracker(_ tracker: Tracker, to category: TrackerCategory)
     
     func completionStatus(for indexPath: IndexPath) -> TrackerCompletion
     func updateDate(_ newDate: Date)
@@ -91,16 +91,17 @@ final class TrackerStore: NSObject {
         )
     }
     
-    private func category() -> TrackerCategoryCoreData {
-        // До реализации экрана с категориями используется единственная категория
+    private func fetchOrCreateCategory(_ name: String) -> TrackerCategoryCoreData {
         let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
+        request.predicate = NSPredicate(format: "name == %@", name)
+        
         let result = try? context.fetch(request)
         if let result,
            !result.isEmpty {
             return result[0]
         } else {
             let category = TrackerCategoryCoreData(context: context)
-            category.name = "Общая категория"
+            category.name = name
             dataController.saveContext()
             return category
         }
@@ -129,8 +130,8 @@ extension TrackerStore: TrackerStoreProtocol {
         return fetchedResultsController.sections?[section].name ?? ""
     }
     
-    func addTracker(_ tracker: Tracker) {
-        let category = category()
+    func addTracker(_ tracker: Tracker, to category: TrackerCategory) {
+        let categoryCoreData = fetchOrCreateCategory(category.name)
         
         let trackerCoreData = TrackerCoreData(context: context)
         
@@ -139,7 +140,7 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerCoreData.emoji = tracker.emoji
         trackerCoreData.colorHex = tracker.color.toHex()
         trackerCoreData.daysRaw = tracker.days?.toRawString() ?? ""
-        trackerCoreData.category = category
+        trackerCoreData.category = categoryCoreData
         
         dataController.saveContext()
     }

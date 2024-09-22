@@ -29,7 +29,8 @@ final class TrackersViewController: UIViewController {
     }()
     
     private lazy var stubView: UIView = {
-        let stubView = TrackersStubView()
+        let stubView = StubView(frame: .zero)
+        stubView.configure(with: "Что будем отслеживать?")
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()
@@ -132,8 +133,12 @@ final class TrackersViewController: UIViewController {
     
     @objc
     private func addNewTracker(_ notification: Notification) {
-        guard let tracker = notification.object as? Tracker else { return }
-        trackerStore.addTracker(tracker)
+        guard let category = notification.object as? TrackerCategory,
+              let tracker = category.trackers.first else {
+            return
+        }
+        
+        trackerStore.addTracker(tracker, to: category)
     }
     
     // MARK: - Actions
