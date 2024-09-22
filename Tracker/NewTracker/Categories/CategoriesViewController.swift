@@ -21,7 +21,8 @@ final class CategoriesViewController: AddTrackerFlowViewController {
         Привычки и события можно
         объединить по смыслу
         """
-        let stubView = StubView(frame: .zero, caption: caption)
+        let stubView = StubView(frame: .zero)
+        stubView.configure(with: caption)
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()

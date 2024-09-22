@@ -9,7 +9,7 @@ final class CategoryCell: UITableViewCell {
         return label
     }()
     
-    let isSelectedImage: UIImageView = {
+    private let isSelectedImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(systemName: "checkmark")
         imageView.tintColor = .ypBlue

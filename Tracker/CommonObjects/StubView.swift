@@ -19,9 +19,8 @@ final class StubView: UIView {
         return label
     }()
     
-    init(frame: CGRect, caption: String) {
+    override init(frame: CGRect) {
         super.init(frame: frame)
-        label.text = caption
         setupView()
     }
     
@@ -43,5 +42,9 @@ final class StubView: UIView {
             label.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8),
             label.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
+    }
+    
+    func configure(with caption: String) {
+        label.text = caption
     }
 }
