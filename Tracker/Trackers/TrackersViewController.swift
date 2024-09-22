@@ -34,7 +34,8 @@ final class TrackersViewController: UIViewController {
     private lazy var stubView: UIView = {
         let caption = NSLocalizedString("trackers.stubView.caption",
                                         comment: "Caption for the stub view when there are no items to track")
-        let stubView = StubView(frame: .zero, caption: caption)
+        let stubView = StubView(frame: .zero)
+        stubView.configure(with: caption)
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()
