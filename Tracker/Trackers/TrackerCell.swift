@@ -102,17 +102,13 @@ final class TrackerCell: UICollectionViewCell {
             completeButton.backgroundColor = color
         }
         
-        let remainder100 = numberOfCompletions % 100
-        let remainder10 = numberOfCompletions % 10
-        if remainder100 >= 11 && remainder100 <= 14 {
-            counterLabel.text = "\(numberOfCompletions) дней"
-        } else if remainder10 == 1 {
-            counterLabel.text = "\(numberOfCompletions) день"
-        } else if remainder10 >= 2 && remainder10 <= 4 {
-            counterLabel.text = "\(numberOfCompletions) дня"
-        } else {
-            counterLabel.text = "\(numberOfCompletions) дней"
-        }
+        counterLabel.text = String(
+            format: NSLocalizedString(
+                "numberOfDays",
+                comment: "Number of days"
+            ),
+            numberOfCompletions
+        )
     }
     
     private func setupConstraints() {

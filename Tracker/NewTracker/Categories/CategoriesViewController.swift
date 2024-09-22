@@ -13,16 +13,19 @@ final class CategoriesViewController: AddTrackerFlowViewController {
     }()
     
     private lazy var addCategoryButton: ActionButton = {
-        ActionButton(title: "Добавить категорию", target: self, action: #selector(addCategoryButtonDidTap))
+        let title = NSLocalizedString(
+            "addCategoryButton.title",
+            comment: "Title for the add category button"
+        )
+        return ActionButton(title: title, target: self, action: #selector(addCategoryButtonDidTap))
     }()
     
     private lazy var stubView: UIView = {
-        let caption = """
-        Привычки и события можно
-        объединить по смыслу
-        """
-        let stubView = StubView(frame: .zero)
-        stubView.configure(with: caption)
+        let caption = NSLocalizedString(
+            "categories.stubView.caption",
+            comment: "Caption for the stub view explaining grouping habits and events"
+        )
+        let stubView = StubView(frame: .zero, caption: caption)
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()
@@ -52,7 +55,7 @@ final class CategoriesViewController: AddTrackerFlowViewController {
         setupBindings()
         configureViewState()
         
-        title = "Категория"
+        title = NSLocalizedString("category", comment: "Title for the view with list of categories")
     }
     
     // MARK: - Private Methods

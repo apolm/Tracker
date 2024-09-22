@@ -1,0 +1,35 @@
+onboarding.description.one = "Track only what you want";
+onboarding.description.two = "Even if it's not liters of water and yoga";
+onboarding.finishButton.title = "What a technology!";
+
+trackers.tabBarItem.title = "Trackers";
+trackers.stubView.caption = "What will we track?";
+
+statistics.tabBarItem.title = "Statistics";
+
+searchController.searchBar.placeholder = "Search";
+
+regularTrackerButton.title = "Habit";
+irregularTrackerButton.title = "Irregular event";
+
+createTrackerView.title = "Create tracker";
+newTrackerView.title.regular = "New habit";
+newTrackerView.title.irregular = "New irregular event";
+newCategoryView.title = "New category";
+
+cancelButton.title = "Cancel";
+createButton.title = "Create";
+addCategoryButton.title = "Add category";
+doneButton.title = "Done";
+
+categories.stubView.caption = "Habits and events can\nbe grouped by meaning";
+
+newTrackerView.name.placeholder = "Enter tracker name";
+newTrackerView.emojiGroup.title = "Emoji";
+newTrackerView.colorGroup.title = "Color";
+
+newCategoryView.name.placeholder = "Enter category name";
+
+category = "Category";
+schedule = "Schedule";
+schedule.isEveryDay = "Every day";

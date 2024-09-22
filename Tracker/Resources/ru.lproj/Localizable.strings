@@ -1,0 +1,35 @@
+onboarding.description.one = "Отслеживайте только то, что хотите";
+onboarding.description.two = "Даже если это не литры воды и йога";
+onboarding.finishButton.title = "Вот это технологии!";
+
+trackers.tabBarItem.title = "Трекеры";
+trackers.stubView.caption = "Что будем отслеживать?";
+
+statistics.tabBarItem.title = "Статистика";
+
+searchController.searchBar.placeholder = "Поиск";
+
+regularTrackerButton.title = "Привычка";
+irregularTrackerButton.title = "Нерегулярное событие";
+
+createTrackerView.title = "Создание трекера";
+newTrackerView.title.regular = "Новая привычка";
+newTrackerView.title.irregular = "Новое нерегулярное событие";
+newCategoryView.title = "Новая категория";
+
+cancelButton.title = "Отменить";
+createButton.title = "Создать";
+addCategoryButton.title = "Добавить категорию";
+doneButton.title = "Готово";
+
+categories.stubView.caption = "Привычки и события можно\nобъединить по смыслу";
+
+newTrackerView.name.placeholder = "Введите название трекера";
+newTrackerView.emojiGroup.title = "Emoji";
+newTrackerView.colorGroup.title = "Цвет";
+
+newCategoryView.name.placeholder = "Введите название категории";
+
+category = "Категория";
+schedule = "Расписание";
+schedule.isEveryDay = "Каждый день";

@@ -44,7 +44,8 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     
     private lazy var cancelButton: UIButton = {
         let button = UIButton()
-        button.setTitle("Отменить", for: .normal)
+        let title = NSLocalizedString("cancelButton.title", comment: "Title for the cancel button")
+        button.setTitle(title, for: .normal)
         button.setTitleColor(.ypRed, for: .normal)
         button.backgroundColor = .ypWhite
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
@@ -58,7 +59,8 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     }()
     
     private lazy var createButton: ActionButton = {
-        ActionButton(title: "Создать", target: self, action: #selector(createButtonDidTap))
+        let title = NSLocalizedString("createButton.title", comment: "Title for the create button")
+        return ActionButton(title: title, target: self, action: #selector(createButtonDidTap))
     }()
     
     private let isRegular: Bool
@@ -118,7 +120,9 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
         configureViewState()
         addHideKeyboardTapGesture()
         
-        title = isRegular ? "Новая привычка" : "Новое нерегулярное событие"
+        title = isRegular
+                ? NSLocalizedString("newTrackerView.title.regular", comment: "Title for creating a new habit")
+                : NSLocalizedString("newTrackerView.title.irregular", comment: "Title for creating a new irregular event")
     }
     
     override func viewDidLayoutSubviews() {
@@ -261,7 +265,11 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.textCellID, for: indexPath) as? TextCell else {
             return UITableViewCell()
         }
-        cell.configure(placeholder: "Введите название трекера") { [weak self] text in
+        let placeholder = NSLocalizedString(
+            "newTrackerView.name.placeholder",
+            comment: "Placeholder for the tracker name input"
+        )
+        cell.configure(placeholder: placeholder) { [weak self] text in
             self?.name = text
             self?.configureViewState()
         }
@@ -273,12 +281,12 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
             return UITableViewCell()
         }
         if indexPath.row == 0 {
-            cell.configure(title: "Категория", caption: categoryName)
+            cell.configure(title: NSLocalizedString("category", comment: "Title for the category cell"), caption: categoryName)
         } else if indexPath.row == 1 {
             var caption = ""
             if let days {
                 if days.count == Weekday.allCases.count {
-                    caption = "Каждый день"
+                    caption = NSLocalizedString("schedule.isEveryDay", comment: "Caption for every day in the schedule")
                 } else {
                     caption = Weekday.orderedWeekdays()
                         .filter{ days.contains($0) }
@@ -286,7 +294,7 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
                         .joined(separator: ", ")
                 }
             }
-            cell.configure(title: "Расписание", caption: caption)
+            cell.configure(title: NSLocalizedString("schedule", comment: "Title for the schedule cell"), caption: caption)
         }
         return cell
     }
@@ -318,7 +326,10 @@ extension NewTrackerViewController: UICollectionViewDelegate {
             guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.headerID, for: indexPath) as? SectionHeader else {
                 return UICollectionReusableView()
             }
-            view.config(with: indexPath.section == 0 ? "Emoji" : "Цвет")
+            let sectionTitle = indexPath.section == 0
+                ? NSLocalizedString("newTrackerView.emojiGroup.title", comment: "Title for the Emoji section")
+                : NSLocalizedString("newTrackerView.colorGroup.title", comment: "Title for the Color section")
+            view.config(with: sectionTitle)
             return view
         } else if kind == UICollectionView.elementKindSectionFooter {
             let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: Constants.footerID, for: indexPath)
