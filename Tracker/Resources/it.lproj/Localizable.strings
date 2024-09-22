@@ -33,3 +33,8 @@ newCategoryView.name.placeholder = "Inserisci il nome della categoria";
 category = "Categoria";
 schedule = "Programma";
 schedule.isEveryDay = "Ogni giorno";
+
+contextMenu.pin.title = "Fissa";
+contextMenu.unpin.title = "Sblocca";
+contextMenu.edit.title = "Modifica";
+contextMenu.delete.title = "Elimina";

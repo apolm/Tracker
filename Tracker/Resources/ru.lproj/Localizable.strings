@@ -33,3 +33,8 @@ newCategoryView.name.placeholder = "Введите название катего
 category = "Категория";
 schedule = "Расписание";
 schedule.isEveryDay = "Каждый день";
+
+contextMenu.pin.title = "Закрепить";
+contextMenu.unpin.title = "Открепить";
+contextMenu.edit.title = "Редактировать";
+contextMenu.delete.title = "Удалить";

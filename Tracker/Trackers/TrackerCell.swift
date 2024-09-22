@@ -2,7 +2,7 @@ import UIKit
 
 final class TrackerCell: UICollectionViewCell {
     // MARK: - Private Properties
-    private lazy var cardView: UIView = {
+    lazy var cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true

@@ -178,6 +178,68 @@ extension TrackersViewController: UICollectionViewDelegate {
         view.config(with: trackerStore.sectionName(for: indexPath.section))
         return view
     }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfigurationForItemsAt indexPaths: [IndexPath],
+                        point: CGPoint) -> UIContextMenuConfiguration? {
+        guard indexPaths.count > 0 else { return nil }
+        let indexPath = indexPaths[0]
+        
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell,
+              cell.cardView.frame.contains(cell.convert(point, from: collectionView)) else { return nil }
+        
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, actionProvider: { actions in
+            let pinTitle = NSLocalizedString("contextMenu.pin.title", comment: "Pin item")
+            let pinAction = UIAction(title: pinTitle) { action in
+                
+            }
+            
+            let unpinTitle = NSLocalizedString("contextMenu.unpin.title", comment: "Unpin item")
+            let unpinAction = UIAction(title: unpinTitle) { action in
+                
+            }
+            
+            let editTitle = NSLocalizedString("contextMenu.edit.title", comment: "Edit item")
+            let editAction = UIAction(title: editTitle) { action in
+                
+            }
+            
+            let deleteTitle = NSLocalizedString("contextMenu.delete.title", comment: "Delete item")
+            let deleteAction = UIAction(title: deleteTitle, attributes: .destructive) { action in
+                
+            }
+            
+            return UIMenu(children: [pinAction, unpinAction, editAction, deleteAction])
+        })
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfiguration configuration: UIContextMenuConfiguration,
+                        highlightPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath,
+              let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell else { return nil }
+        
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+        
+        let targetedPreview = UITargetedPreview(view: cell.cardView, parameters: parameters)
+        return targetedPreview
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        contextMenuConfiguration configuration: UIContextMenuConfiguration,
+                        dismissalPreviewForItemAt indexPath: IndexPath) -> UITargetedPreview? {
+        guard let indexPath = configuration.identifier as? IndexPath,
+              let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell else {
+            return nil
+        }
+        
+        let parameters = UIPreviewParameters()
+        parameters.backgroundColor = .clear
+        
+        let targetedPreview = UITargetedPreview(view: cell.cardView, parameters: parameters)
+        return targetedPreview
+    }
 }
 
 // MARK: - UICollectionViewDataSource

@@ -33,3 +33,8 @@ newCategoryView.name.placeholder = "Enter category name";
 category = "Category";
 schedule = "Schedule";
 schedule.isEveryDay = "Every day";
+
+contextMenu.pin.title = "Pin";
+contextMenu.unpin.title = "Unpin";
+contextMenu.edit.title = "Edit";
+contextMenu.delete.title = "Delete";
