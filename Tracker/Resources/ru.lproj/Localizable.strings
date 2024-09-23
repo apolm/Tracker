@@ -38,3 +38,5 @@ contextMenu.pin.title = "Закрепить";
 contextMenu.unpin.title = "Открепить";
 contextMenu.edit.title = "Редактировать";
 contextMenu.delete.title = "Удалить";
+
+pinnedCategories.name = "Закрепленные";

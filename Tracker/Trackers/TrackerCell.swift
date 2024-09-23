@@ -54,12 +54,21 @@ final class TrackerCell: UICollectionViewCell {
         return button
     }()
     
+    private let pinImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.tintColor = .ypWhite
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
+    }()
+    
     private var isCompleted = false
     private var numberOfCompletions = 0
     private var color = UIColor()
     
     // MARK: - Public Properties
     weak var delegate: TrackerCellDelegate?
+    var isPinned: Bool = false
     
     // MARK: - Public Methods
     override init(frame: CGRect) {
@@ -69,6 +78,7 @@ final class TrackerCell: UICollectionViewCell {
         cardView.addSubview(circleView)
         cardView.addSubview(titleLabel)
         cardView.addSubview(emojiLabel)
+        cardView.addSubview(pinImage)
         addSubview(counterLabel)
         addSubview(completeButton)
         
@@ -79,10 +89,17 @@ final class TrackerCell: UICollectionViewCell {
         super.init(coder: coder)
     }
     
-    func config(with tracker: Tracker, numberOfCompletions: Int, isCompleted: Bool, completionIsEnabled: Bool) {
+    func config(
+        with tracker: Tracker,
+        numberOfCompletions: Int,
+        isCompleted: Bool,
+        completionIsEnabled: Bool,
+        isPinned: Bool
+    ) {
         self.isCompleted = isCompleted
         self.numberOfCompletions = numberOfCompletions
         self.color = tracker.color
+        self.isPinned = isPinned
         
         cardView.backgroundColor = tracker.color
         completeButton.isEnabled = completionIsEnabled
@@ -109,6 +126,8 @@ final class TrackerCell: UICollectionViewCell {
             ),
             numberOfCompletions
         )
+        
+        pinImage.isHidden = !isPinned
     }
     
     private func setupConstraints() {
@@ -140,7 +159,12 @@ final class TrackerCell: UICollectionViewCell {
             counterLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             counterLabel.trailingAnchor.constraint(equalTo: completeButton.leadingAnchor, constant: -8),
             counterLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 16),
-            counterLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
+            counterLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+            
+            pinImage.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10),
+            pinImage.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
+            pinImage.widthAnchor.constraint(equalToConstant: 12),
+            pinImage.heightAnchor.constraint(equalToConstant: 12)
         ])
     }
     

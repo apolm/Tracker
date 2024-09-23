@@ -182,35 +182,49 @@ extension TrackersViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         contextMenuConfigurationForItemsAt indexPaths: [IndexPath],
                         point: CGPoint) -> UIContextMenuConfiguration? {
-        guard indexPaths.count > 0 else { return nil }
-        let indexPath = indexPaths[0]
+        guard let indexPath = indexPaths.first else { return nil }
         
         guard let cell = collectionView.cellForItem(at: indexPath) as? TrackerCell,
               cell.cardView.frame.contains(cell.convert(point, from: collectionView)) else { return nil }
         
-        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, actionProvider: { actions in
-            let pinTitle = NSLocalizedString("contextMenu.pin.title", comment: "Pin item")
-            let pinAction = UIAction(title: pinTitle) { action in
-                
-            }
+        return UIContextMenuConfiguration(identifier: indexPath as NSCopying, actionProvider: { [weak self] actions in
+            guard let self = self else { return nil }
             
-            let unpinTitle = NSLocalizedString("contextMenu.unpin.title", comment: "Unpin item")
-            let unpinAction = UIAction(title: unpinTitle) { action in
-                
-            }
+            var menuItems: [UIAction] = []
+            menuItems.append(self.createPinAction(for: indexPath, isPinned: cell.isPinned))
+            menuItems.append(self.createEditAction())
+            menuItems.append(self.createDeleteAction())
             
-            let editTitle = NSLocalizedString("contextMenu.edit.title", comment: "Edit item")
-            let editAction = UIAction(title: editTitle) { action in
-                
-            }
-            
-            let deleteTitle = NSLocalizedString("contextMenu.delete.title", comment: "Delete item")
-            let deleteAction = UIAction(title: deleteTitle, attributes: .destructive) { action in
-                
-            }
-            
-            return UIMenu(children: [pinAction, unpinAction, editAction, deleteAction])
+            return UIMenu(children: menuItems)
         })
+    }
+    
+    private func createPinAction(for indexPath: IndexPath, isPinned: Bool) -> UIAction {
+        let title = isPinned ? NSLocalizedString("contextMenu.unpin.title", comment: "Unpin item") :
+                               NSLocalizedString("contextMenu.pin.title", comment: "Pin item")
+        
+        return UIAction(title: title) { [weak self] action in
+            guard let self = self else { return }
+            if isPinned {
+                self.trackerStore.unpinTracker(at: indexPath)
+            } else {
+                self.trackerStore.pinTracker(at: indexPath)
+            }
+        }
+    }
+    
+    private func createEditAction() -> UIAction {
+        let title = NSLocalizedString("contextMenu.edit.title", comment: "Edit item")
+        return UIAction(title: title) { action in
+            
+        }
+    }
+    
+    private func createDeleteAction() -> UIAction {
+        let title = NSLocalizedString("contextMenu.delete.title", comment: "Delete item")
+        return UIAction(title: title, attributes: .destructive) { action in
+            
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -263,7 +277,8 @@ extension TrackersViewController: UICollectionViewDataSource {
         cell.config(with: completionStatus.tracker,
                     numberOfCompletions: completionStatus.numberOfCompletions,
                     isCompleted: completionStatus.isCompleted,
-                    completionIsEnabled: currentDate <= Date().startOfDay)
+                    completionIsEnabled: currentDate <= Date().startOfDay,
+                    isPinned: completionStatus.isPinned)
         cell.delegate = self
         return cell
     }
@@ -329,6 +344,12 @@ extension TrackersViewController: TrackerStoreDelegate {
             
             for move in update.movedIndices {
                 collectionView.moveItem(at: move.from, to: move.to)
+            }
+        }, completion: nil)
+        
+        collectionView.performBatchUpdates({
+            for move in update.movedIndices {
+                collectionView.reloadItems(at: [move.to])
             }
         }, completion: nil)
         

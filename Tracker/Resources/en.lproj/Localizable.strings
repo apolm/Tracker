@@ -38,3 +38,5 @@ contextMenu.pin.title = "Pin";
 contextMenu.unpin.title = "Unpin";
 contextMenu.edit.title = "Edit";
 contextMenu.delete.title = "Delete";
+
+pinnedCategories.name = "Pinned";

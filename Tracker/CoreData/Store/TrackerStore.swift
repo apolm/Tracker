@@ -14,6 +14,7 @@ struct TrackerCompletion {
     let tracker: Tracker
     let numberOfCompletions: Int
     let isCompleted: Bool
+    let isPinned: Bool
 }
 
 protocol TrackerStoreDelegate: AnyObject {
@@ -28,6 +29,8 @@ protocol TrackerStoreProtocol {
     func sectionName(for section: Int) -> String
     
     func addTracker(_ tracker: Tracker, to category: TrackerCategory)
+    func pinTracker(at indexPath: IndexPath)
+    func unpinTracker(at indexPath: IndexPath)
     
     func completionStatus(for indexPath: IndexPath) -> TrackerCompletion
     func updateDate(_ newDate: Date)
@@ -40,6 +43,7 @@ final class TrackerStore: NSObject {
     
     private let dataController = DataController.shared
     private let context = DataController.shared.context
+    private let categoryProvider: TrackerCategoryCoreDataProvider
     
     private var insertedSections: [Int] = []
     private var deletedSections: [Int] = []
@@ -50,22 +54,27 @@ final class TrackerStore: NSObject {
     
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.name", ascending: true),
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.order", ascending: true),
                                         NSSortDescriptor(key: "name", ascending: true)]
         fetchRequest.predicate = fetchPredicate()
         
         let fetchedResultsController = NSFetchedResultsController(fetchRequest: fetchRequest,
                                                                   managedObjectContext: context,
-                                                                  sectionNameKeyPath: "category.name",
+                                                                  sectionNameKeyPath: "category.order",
                                                                   cacheName: nil)
         fetchedResultsController.delegate = self
         try? fetchedResultsController.performFetch()
         return fetchedResultsController
     }()
     
-    init(delegate: TrackerStoreDelegate, for date: Date) {
+    init(delegate: TrackerStoreDelegate, for date: Date, categoryProvider: TrackerCategoryCoreDataProvider? = nil) {
         self.delegate = delegate
         self.date = date
+        if let categoryProvider {
+            self.categoryProvider = categoryProvider
+        } else {
+            self.categoryProvider = TrackerCategoryStore(delegate: nil)
+        }
     }
     
     private func fetchPredicate() -> NSPredicate {
@@ -90,22 +99,6 @@ final class TrackerStore: NSObject {
             #keyPath(TrackerCoreData.records)
         )
     }
-    
-    private func fetchOrCreateCategory(_ name: String) -> TrackerCategoryCoreData {
-        let request = NSFetchRequest<TrackerCategoryCoreData>(entityName: "TrackerCategoryCoreData")
-        request.predicate = NSPredicate(format: "name == %@", name)
-        
-        let result = try? context.fetch(request)
-        if let result,
-           !result.isEmpty {
-            return result[0]
-        } else {
-            let category = TrackerCategoryCoreData(context: context)
-            category.name = name
-            dataController.saveContext()
-            return category
-        }
-    }
 }
 
 // MARK: - TrackerStoreProtocol
@@ -127,11 +120,12 @@ extension TrackerStore: TrackerStoreProtocol {
     }
     
     func sectionName(for section: Int) -> String {
-        return fetchedResultsController.sections?[section].name ?? ""
+        let order = fetchedResultsController.sections?[section].name ?? ""
+        return categoryProvider.categoryName(from: order)
     }
     
     func addTracker(_ tracker: Tracker, to category: TrackerCategory) {
-        let categoryCoreData = fetchOrCreateCategory(category.name)
+        let categoryCoreData = categoryProvider.fetchOrCreateCategory(category.name)
         
         let trackerCoreData = TrackerCoreData(context: context)
         
@@ -141,6 +135,30 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerCoreData.colorHex = tracker.color.toHex()
         trackerCoreData.daysRaw = tracker.days?.toRawString() ?? ""
         trackerCoreData.category = categoryCoreData
+        
+        dataController.saveContext()
+    }
+    
+    func pinTracker(at indexPath: IndexPath) {
+        let trackerCoreData = fetchedResultsController.object(at: indexPath)
+        
+        guard let category = trackerCoreData.category, !category.isPinned else { return }
+        
+        let pinnedCategory = categoryProvider.fetchOrCreatePinnedCategory()
+        
+        trackerCoreData.categoryBeforePin = trackerCoreData.category
+        trackerCoreData.category = pinnedCategory
+        
+        dataController.saveContext()
+    }
+    
+    func unpinTracker(at indexPath: IndexPath) {
+        let trackerCoreData = fetchedResultsController.object(at: indexPath)
+        
+        guard let _ = trackerCoreData.categoryBeforePin else { return }
+        
+        trackerCoreData.category = trackerCoreData.categoryBeforePin
+        trackerCoreData.categoryBeforePin = nil
         
         dataController.saveContext()
     }
@@ -161,7 +179,8 @@ extension TrackerStore: TrackerStoreProtocol {
         
         let trackerCompletion = TrackerCompletion(tracker: tracker,
                                                   numberOfCompletions: trackerCoreData.records?.count ?? 0,
-                                                  isCompleted: isCompleted)
+                                                  isCompleted: isCompleted,
+                                                  isPinned: trackerCoreData.category?.isPinned ?? false)
         return trackerCompletion
     }
     

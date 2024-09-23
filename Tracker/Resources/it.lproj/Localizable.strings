@@ -38,3 +38,5 @@ contextMenu.pin.title = "Fissa";
 contextMenu.unpin.title = "Sblocca";
 contextMenu.edit.title = "Modifica";
 contextMenu.delete.title = "Elimina";
+
+pinnedCategories.name = "Categorie fisse";
