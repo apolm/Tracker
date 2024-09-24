@@ -29,6 +29,7 @@ protocol TrackerStoreProtocol {
     func sectionName(for section: Int) -> String
     
     func addTracker(_ tracker: Tracker, to category: TrackerCategory)
+    func updateTracker(_ tracker: Tracker, with category: TrackerCategory)
     func pinTracker(at indexPath: IndexPath)
     func unpinTracker(at indexPath: IndexPath)
     
@@ -100,6 +101,14 @@ final class TrackerStore: NSObject {
             #keyPath(TrackerCoreData.records)
         )
     }
+    
+    private func fetchTrackerByID(_ id: UUID) -> TrackerCoreData? {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", id as CVarArg)
+        fetchRequest.fetchLimit = 1
+        
+        return try? context.fetch(fetchRequest).first
+    }
 }
 
 // MARK: - TrackerStoreProtocol
@@ -136,6 +145,25 @@ extension TrackerStore: TrackerStoreProtocol {
         trackerCoreData.colorHex = tracker.color.toHex()
         trackerCoreData.daysRaw = tracker.days?.toRawString() ?? ""
         trackerCoreData.category = categoryCoreData
+        
+        dataController.saveContext()
+    }
+    
+    func updateTracker(_ tracker: Tracker, with category: TrackerCategory) {
+        guard let trackerCoreData = fetchTrackerByID(tracker.id) else { return }
+        
+        let categoryCoreData = categoryProvider.fetchOrCreateCategory(category.name)
+        
+        trackerCoreData.name = tracker.name
+        trackerCoreData.emoji = tracker.emoji
+        trackerCoreData.colorHex = tracker.color.toHex()
+        trackerCoreData.daysRaw = tracker.days?.toRawString() ?? ""
+        
+        if trackerCoreData.category?.isPinned ?? false {
+            trackerCoreData.categoryBeforePin = categoryCoreData
+        } else {
+            trackerCoreData.category = categoryCoreData
+        }
         
         dataController.saveContext()
     }

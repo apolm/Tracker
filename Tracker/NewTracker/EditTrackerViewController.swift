@@ -15,6 +15,14 @@ final class EditTrackerViewController: AddTrackerFlowViewController {
         return view
     }()
     
+    private lazy var numberOfCompletionsLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 32)
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     private lazy var tableView: UITableView = {
         let table = BaseTable(frame: .zero, style: .grouped)
         table.baseTableDelegate = self
@@ -68,11 +76,14 @@ final class EditTrackerViewController: AddTrackerFlowViewController {
     
     private let isNew: Bool
     private let isRegular: Bool
+    private let id: UUID
     private var name: String = ""
     private var categoryName: String = ""
     private var color = UIColor.clear
     private var emoji = ""
     private var days: Set<Weekday>?
+    
+    private let numberOfCompletions: Int
     
     private enum Constants {
         static let headerHeight: CGFloat = 18
@@ -109,17 +120,21 @@ final class EditTrackerViewController: AddTrackerFlowViewController {
     init(isRegular: Bool) {
         isNew = true
         self.isRegular = isRegular
+        id = UUID()
+        numberOfCompletions = 0
         super.init(nibName: nil, bundle: nil)
     }
     
     init(completionStatus: TrackerCompletion, categoryName: String) {
         isNew = false
         isRegular = !(completionStatus.tracker.days?.isEmpty ?? true)
+        id = completionStatus.tracker.id
         name = completionStatus.tracker.name
         self.categoryName = categoryName
         color = completionStatus.tracker.color
         emoji = completionStatus.tracker.emoji
         days = completionStatus.tracker.days
+        numberOfCompletions = completionStatus.numberOfCompletions
         
         super.init(nibName: nil, bundle: nil)
     }
@@ -157,6 +172,9 @@ final class EditTrackerViewController: AddTrackerFlowViewController {
     
     // MARK: - Private Methods
     private func setupViews() {
+        if !isNew {
+            contentView.addSubview(numberOfCompletionsLabel)
+        }
         contentView.addSubview(tableView)
         contentView.addSubview(collectionView)
         contentView.addSubview(cancelButton)
@@ -182,12 +200,28 @@ final class EditTrackerViewController: AddTrackerFlowViewController {
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
-            tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            tableView.topAnchor.constraint(equalTo: contentView.topAnchor),
-
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
+        
+        if isNew {
+            NSLayoutConstraint.activate([
+                tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                tableView.topAnchor.constraint(equalTo: contentView.topAnchor)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                numberOfCompletionsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                numberOfCompletionsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                numberOfCompletionsLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 24),
+                
+                tableView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
+                tableView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+                tableView.topAnchor.constraint(equalTo: numberOfCompletionsLabel.bottomAnchor, constant: 16),
+            ])
+        }
+        
+        NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: tableView.bottomAnchor, constant: 16),
@@ -217,6 +251,14 @@ final class EditTrackerViewController: AddTrackerFlowViewController {
         title = isRegular
                 ? NSLocalizedString("existingTrackerView.title.regular", comment: "Title for editing existing habit")
                 : NSLocalizedString("existingTrackerView.title.irregular", comment: "Title for editing existing irregular event")
+        
+        numberOfCompletionsLabel.text = String(
+            format: NSLocalizedString(
+                "numberOfDays",
+                comment: "Number of days"
+            ),
+            numberOfCompletions
+        )
         
         if let emojiIndex = emojis.firstIndex(of: emoji) {
             let indexPath = IndexPath(item: emojiIndex, section: 0)
@@ -253,9 +295,14 @@ final class EditTrackerViewController: AddTrackerFlowViewController {
     }
     
     @objc private func createButtonDidTap() {
-        let tracker = Tracker(id: UUID(), name: name, color: color, emoji: emoji, days: days)
+        let notification = isNew
+        ? TrackersViewController.addTrackerNotificationName
+        : TrackersViewController.updateTrackerNotificationName
+        
+        let tracker = Tracker(id: id, name: name, color: color, emoji: emoji, days: days)
         let category = TrackerCategory(name: categoryName, trackers: [tracker])
-        NotificationCenter.default.post(name: TrackersViewController.notificationName, object: category)
+        NotificationCenter.default.post(name: notification, object: category)
+        
         self.dismiss(animated: true)
     }
     

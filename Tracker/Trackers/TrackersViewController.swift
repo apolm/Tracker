@@ -65,7 +65,10 @@ final class TrackersViewController: UIViewController {
     }
     
     private var currentDate: Date = Date().startOfDay
-    static let notificationName = NSNotification.Name("AddNewTracker")
+    
+    static let addTrackerNotificationName = NSNotification.Name("AddNewTracker")
+    static let updateTrackerNotificationName = NSNotification.Name("UpdateTracker")
+    
     private let layoutParams = GeometricParams(
         columnCount: 2,
         rowCount: 0,
@@ -86,21 +89,11 @@ final class TrackersViewController: UIViewController {
         setupConstraints()
         setupNavigationBar()
         configureViewState()
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(addNewTracker),
-            name: TrackersViewController.notificationName,
-            object: nil
-        )
+        addObservers()
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(
-            self,
-            name: TrackersViewController.notificationName,
-            object: nil
-        )
+       removeObservers()
     }
     
     // MARK: - Private Methods
@@ -136,6 +129,36 @@ final class TrackersViewController: UIViewController {
         title = NSLocalizedString("trackers.tabBarItem.title", comment: "Title for the Trackers tab")
     }
     
+    private func addObservers() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(addNewTracker),
+            name: TrackersViewController.addTrackerNotificationName,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateTracker),
+            name: TrackersViewController.updateTrackerNotificationName,
+            object: nil
+        )
+    }
+    
+    private func removeObservers() {
+        NotificationCenter.default.removeObserver(
+            self,
+            name: TrackersViewController.addTrackerNotificationName,
+            object: nil
+        )
+        
+        NotificationCenter.default.removeObserver(
+            self,
+            name: TrackersViewController.updateTrackerNotificationName,
+            object: nil
+        )
+    }
+    
     @objc
     private func addNewTracker(_ notification: Notification) {
         guard let category = notification.object as? TrackerCategory,
@@ -145,6 +168,17 @@ final class TrackersViewController: UIViewController {
         
         trackerStore.addTracker(tracker, to: category)
     }
+    
+    @objc
+    private func updateTracker(_ notification: Notification) {
+        guard let category = notification.object as? TrackerCategory,
+              let tracker = category.trackers.first else {
+            return
+        }
+        
+        trackerStore.updateTracker(tracker, with: category)
+    }
+    
     
     // MARK: - Actions
     @objc private func addTrackerButtonDidTap() {
