@@ -227,7 +227,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             var menuItems: [UIAction] = []
             menuItems.append(self.createPinAction(for: indexPath, isPinned: cell.isPinned))
             menuItems.append(self.createEditAction(for: indexPath))
-            menuItems.append(self.createDeleteAction())
+            menuItems.append(self.createDeleteAction(for: indexPath))
             
             return UIMenu(children: menuItems)
         })
@@ -263,10 +263,39 @@ extension TrackersViewController: UICollectionViewDelegate {
         }
     }
     
-    private func createDeleteAction() -> UIAction {
+    private func createDeleteAction(for indexPath: IndexPath) -> UIAction {
         let title = NSLocalizedString("contextMenu.delete.title", comment: "Delete item")
-        return UIAction(title: title, attributes: .destructive) { action in
+        return UIAction(title: title, attributes: .destructive) { [weak self] action in
+            guard let self = self else { return }
             
+            let actionSheetController = UIAlertController(
+                title: NSLocalizedString("deleteConfirmation.title",
+                                         comment: "Are you sure you want to delete this tracker?"),
+                message: nil,
+                preferredStyle: .actionSheet
+            )
+            
+            let deleteAction = UIAlertAction(
+                title: NSLocalizedString("deleteButton.title",
+                                         comment: "Delete button title"),
+                style: .destructive
+            ) { [weak self] _ in
+                self?.trackerStore.deleteTracker(at: indexPath)
+            }
+            
+            let cancelAction = UIAlertAction(
+                title: NSLocalizedString("cancelButton.title",
+                                         comment: "Cancel button title"),
+                style: .cancel,
+                handler: nil
+            )
+            
+            actionSheetController.addAction(deleteAction)
+            actionSheetController.addAction(cancelAction)
+            
+            actionSheetController.preferredAction = cancelAction
+            
+            self.present(actionSheetController, animated: true, completion: nil)
         }
     }
     

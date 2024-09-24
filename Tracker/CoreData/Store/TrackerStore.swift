@@ -30,6 +30,7 @@ protocol TrackerStoreProtocol {
     
     func addTracker(_ tracker: Tracker, to category: TrackerCategory)
     func updateTracker(_ tracker: Tracker, with category: TrackerCategory)
+    func deleteTracker(at indexPath: IndexPath)
     func pinTracker(at indexPath: IndexPath)
     func unpinTracker(at indexPath: IndexPath)
     
@@ -165,6 +166,12 @@ extension TrackerStore: TrackerStoreProtocol {
             trackerCoreData.category = categoryCoreData
         }
         
+        dataController.saveContext()
+    }
+    
+    func deleteTracker(at indexPath: IndexPath) {
+        let trackerCoreData = fetchedResultsController.object(at: indexPath)
+        context.delete(trackerCoreData)
         dataController.saveContext()
     }
     

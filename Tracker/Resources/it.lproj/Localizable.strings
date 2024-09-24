@@ -26,6 +26,7 @@ createButton.title = "Crea";
 addCategoryButton.title = "Aggiungi categoria";
 doneButton.title = "Fatto";
 saveButton.title = "Salva";
+deleteButton.title = "Elimina";
 
 categories.stubView.caption = "Le abitudini e gli eventi possono\nessere raggruppati per significato";
 
@@ -45,3 +46,5 @@ contextMenu.edit.title = "Modifica";
 contextMenu.delete.title = "Elimina";
 
 pinnedCategories.name = "Categorie fisse";
+
+deleteConfirmation.title = "Sei sicuro di voler eliminare questo tracker?";

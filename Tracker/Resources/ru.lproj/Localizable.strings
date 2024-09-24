@@ -26,6 +26,7 @@ createButton.title = "Создать";
 addCategoryButton.title = "Добавить категорию";
 doneButton.title = "Готово";
 saveButton.title = "Сохранить";
+deleteButton.title = "Удалить";
 
 categories.stubView.caption = "Привычки и события можно\nобъединить по смыслу";
 
@@ -45,3 +46,5 @@ contextMenu.edit.title = "Редактировать";
 contextMenu.delete.title = "Удалить";
 
 pinnedCategories.name = "Закрепленные";
+
+deleteConfirmation.title = "Уверены что хотите удалить трекер?";
