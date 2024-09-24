@@ -104,7 +104,7 @@ extension NewCategoryViewController: BaseTableDataSourceDelegate {
             "newCategoryView.name.placeholder",
             comment: "Placeholder for the category name input"
         )
-        cell.configure(placeholder: placeholder) { [weak self] text in
+        cell.configure(text: "", placeholder: placeholder) { [weak self] text in
             self?.name = text
         }
         return cell

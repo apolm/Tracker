@@ -1,6 +1,6 @@
 import UIKit
 
-final class NewTrackerViewController: AddTrackerFlowViewController {
+final class EditTrackerViewController: AddTrackerFlowViewController {
     // MARK: - Private Properties
     private lazy var scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -59,10 +59,14 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     }()
     
     private lazy var createButton: ActionButton = {
-        let title = NSLocalizedString("createButton.title", comment: "Title for the create button")
+        let title = isNew 
+        ? NSLocalizedString("createButton.title", comment: "Title for the create button")
+        : NSLocalizedString("saveButton.title", comment: "Title for the save button")
+        
         return ActionButton(title: title, target: self, action: #selector(createButtonDidTap))
     }()
     
+    private let isNew: Bool
     private let isRegular: Bool
     private var name: String = ""
     private var categoryName: String = ""
@@ -103,7 +107,20 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     
     // MARK: - Public Methods
     init(isRegular: Bool) {
+        isNew = true
         self.isRegular = isRegular
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(completionStatus: TrackerCompletion, categoryName: String) {
+        isNew = false
+        isRegular = !(completionStatus.tracker.days?.isEmpty ?? true)
+        name = completionStatus.tracker.name
+        self.categoryName = categoryName
+        color = completionStatus.tracker.color
+        emoji = completionStatus.tracker.emoji
+        days = completionStatus.tracker.days
+        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -117,12 +134,15 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
         
         setupViews()
         setupConstraints()
+        
+        if isNew {
+            configureForNewTracker()
+        } else {
+            configureForExistingTracker()
+        }
+        
         configureViewState()
         addHideKeyboardTapGesture()
-        
-        title = isRegular
-                ? NSLocalizedString("newTrackerView.title.regular", comment: "Title for creating a new habit")
-                : NSLocalizedString("newTrackerView.title.irregular", comment: "Title for creating a new irregular event")
     }
     
     override func viewDidLayoutSubviews() {
@@ -187,6 +207,30 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
         ])
     }
     
+    private func configureForNewTracker() {
+        title = isRegular
+                ? NSLocalizedString("newTrackerView.title.regular", comment: "Title for creating a new habit")
+                : NSLocalizedString("newTrackerView.title.irregular", comment: "Title for creating a new irregular event")
+    }
+    
+    private func configureForExistingTracker() {
+        title = isRegular
+                ? NSLocalizedString("existingTrackerView.title.regular", comment: "Title for editing existing habit")
+                : NSLocalizedString("existingTrackerView.title.irregular", comment: "Title for editing existing irregular event")
+        
+        if let emojiIndex = emojis.firstIndex(of: emoji) {
+            let indexPath = IndexPath(item: emojiIndex, section: 0)
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+            selectedCells[0] = indexPath
+        }
+        
+        if let colorIndex = colors.firstIndex(of: color.toHex()) {
+            let indexPath = IndexPath(item: colorIndex, section: 1)
+            collectionView.selectItem(at: indexPath, animated: false, scrollPosition: [])
+            selectedCells[1] = indexPath
+        }
+    }
+    
     private func configureViewState() {
         let daysAreValid = days?.isEmpty == false || !isRegular
         createButton.isEnabled = 
@@ -220,7 +264,7 @@ final class NewTrackerViewController: AddTrackerFlowViewController {
     }
 }
 
-extension NewTrackerViewController {
+extension EditTrackerViewController {
     var emojis: [String] {
         [
             "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -239,7 +283,7 @@ extension NewTrackerViewController {
 }
 
 // MARK: - BaseTableDataSourceDelegate
-extension NewTrackerViewController: BaseTableDataSourceDelegate {
+extension EditTrackerViewController: BaseTableDataSourceDelegate {
     func numberOfSections() -> Int {
         2
     }
@@ -269,7 +313,7 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
             "newTrackerView.name.placeholder",
             comment: "Placeholder for the tracker name input"
         )
-        cell.configure(placeholder: placeholder) { [weak self] text in
+        cell.configure(text: name, placeholder: placeholder) { [weak self] text in
             self?.name = text
             self?.configureViewState()
         }
@@ -318,7 +362,7 @@ extension NewTrackerViewController: BaseTableDataSourceDelegate {
 }
 
 // MARK: - UICollectionViewDelegate
-extension NewTrackerViewController: UICollectionViewDelegate {
+extension EditTrackerViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
@@ -362,7 +406,7 @@ extension NewTrackerViewController: UICollectionViewDelegate {
 }
 
 // MARK: - UICollectionViewDataSource
-extension NewTrackerViewController: UICollectionViewDataSource {
+extension EditTrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
     }
@@ -402,7 +446,7 @@ extension NewTrackerViewController: UICollectionViewDataSource {
 }
 
 // MARK: - UICollectionViewDelegateFlowLayout
-extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
+extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView,
                         layout collectionViewLayout: UICollectionViewLayout,
                         referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -444,7 +488,7 @@ extension NewTrackerViewController: UICollectionViewDelegateFlowLayout {
 }
 
 // MARK: - CategorySelectionDelegate
-extension NewTrackerViewController: CategorySelectionDelegate {
+extension EditTrackerViewController: CategorySelectionDelegate {
     func didSelectCategory(_ name: String) {
         categoryName = name
         tableView.reloadData()

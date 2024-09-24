@@ -33,6 +33,7 @@ protocol TrackerStoreProtocol {
     func unpinTracker(at indexPath: IndexPath)
     
     func completionStatus(for indexPath: IndexPath) -> TrackerCompletion
+    func categoryName(for indexPath: IndexPath) -> String
     func updateDate(_ newDate: Date)
     func changeCompletion(for indexPath: IndexPath, to isCompleted: Bool)
 }
@@ -182,6 +183,16 @@ extension TrackerStore: TrackerStoreProtocol {
                                                   isCompleted: isCompleted,
                                                   isPinned: trackerCoreData.category?.isPinned ?? false)
         return trackerCompletion
+    }
+    
+    func categoryName(for indexPath: IndexPath) -> String {
+        let trackerCoreData = fetchedResultsController.object(at: indexPath)
+        
+        if trackerCoreData.category?.isPinned ?? false {
+            return trackerCoreData.categoryBeforePin?.name ?? ""
+        } else {
+            return trackerCoreData.category?.name ?? ""
+        }
     }
     
     func updateDate(_ newDate: Date) {

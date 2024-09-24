@@ -13,14 +13,19 @@ regularTrackerButton.title = "Habit";
 irregularTrackerButton.title = "Irregular event";
 
 createTrackerView.title = "Create tracker";
+
 newTrackerView.title.regular = "New habit";
 newTrackerView.title.irregular = "New irregular event";
+existingTrackerView.title.regular = "Edit habit";
+existingTrackerView.title.irregular = "Edit irregular event";
+
 newCategoryView.title = "New category";
 
 cancelButton.title = "Cancel";
 createButton.title = "Create";
 addCategoryButton.title = "Add category";
 doneButton.title = "Done";
+saveButton.title = "Save";
 
 categories.stubView.caption = "Habits and events can\nbe grouped by meaning";
 

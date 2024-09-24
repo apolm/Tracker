@@ -13,14 +13,19 @@ regularTrackerButton.title = "Привычка";
 irregularTrackerButton.title = "Нерегулярное событие";
 
 createTrackerView.title = "Создание трекера";
+
 newTrackerView.title.regular = "Новая привычка";
 newTrackerView.title.irregular = "Новое нерегулярное событие";
+existingTrackerView.title.regular = "Редактирование привычки";
+existingTrackerView.title.irregular = "Редактирование нерегулярного события";
+
 newCategoryView.title = "Новая категория";
 
 cancelButton.title = "Отменить";
 createButton.title = "Создать";
 addCategoryButton.title = "Добавить категорию";
 doneButton.title = "Готово";
+saveButton.title = "Сохранить";
 
 categories.stubView.caption = "Привычки и события можно\nобъединить по смыслу";
 

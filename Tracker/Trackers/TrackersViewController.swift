@@ -192,7 +192,7 @@ extension TrackersViewController: UICollectionViewDelegate {
             
             var menuItems: [UIAction] = []
             menuItems.append(self.createPinAction(for: indexPath, isPinned: cell.isPinned))
-            menuItems.append(self.createEditAction())
+            menuItems.append(self.createEditAction(for: indexPath))
             menuItems.append(self.createDeleteAction())
             
             return UIMenu(children: menuItems)
@@ -213,10 +213,19 @@ extension TrackersViewController: UICollectionViewDelegate {
         }
     }
     
-    private func createEditAction() -> UIAction {
+    private func createEditAction(for indexPath: IndexPath) -> UIAction {
         let title = NSLocalizedString("contextMenu.edit.title", comment: "Edit item")
-        return UIAction(title: title) { action in
+        return UIAction(title: title) { [weak self] action in
+            guard let self = self else { return }
             
+            let viewController = EditTrackerViewController(
+                completionStatus: self.trackerStore.completionStatus(for: indexPath),
+                categoryName: self.trackerStore.categoryName(for: indexPath)
+            )
+            
+            let navigationController = UINavigationController(rootViewController: viewController)
+            navigationController.modalPresentationStyle = .formSheet
+            present(navigationController, animated: true)
         }
     }
     

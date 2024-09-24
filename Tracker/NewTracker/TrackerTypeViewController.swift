@@ -57,7 +57,7 @@ final class TrackerTypeViewController: AddTrackerFlowViewController {
     
     @objc private func buttonDidTap(_ sender: UIButton) {
         let isRegular = sender == regularTrackerButton
-        let viewController = NewTrackerViewController(isRegular: isRegular)
+        let viewController = EditTrackerViewController(isRegular: isRegular)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

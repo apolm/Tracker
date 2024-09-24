@@ -35,7 +35,8 @@ final class TextCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(placeholder: String, onTextChange: @escaping (String) -> Void) {
+    func configure(text: String, placeholder: String, onTextChange: @escaping (String) -> Void) {
+        textField.text = text
         textField.placeholder = placeholder
         self.onTextChange = onTextChange
     }
