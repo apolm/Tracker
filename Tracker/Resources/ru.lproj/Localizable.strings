@@ -48,3 +48,9 @@ contextMenu.delete.title = "Удалить";
 pinnedCategories.name = "Закрепленные";
 
 deleteConfirmation.title = "Уверены что хотите удалить трекер?";
+
+filter.all = "Все трекеры";
+filter.today = "Трекеры на сегодня";
+filter.completed = "Завершенные";
+filter.uncompleted = "Не завершенные";
+filter.title = "Фильтры";

@@ -48,3 +48,9 @@ contextMenu.delete.title = "Delete";
 pinnedCategories.name = "Pinned";
 
 deleteConfirmation.title = "Are you sure you want to delete this tracker?";
+
+filter.all = "All trackers";
+filter.today = "Trackers for current day";
+filter.completed = "Completed";
+filter.uncompleted = "Uncompleted";
+filter.title = "Filters";

@@ -50,13 +50,26 @@ final class TrackersViewController: UIViewController {
                                 withReuseIdentifier: Constants.headerIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
+        collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 50, right: 0)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
     }()
     
+    private lazy var filterButton: UIButton = {
+        let button = UIButton()
+        let title = NSLocalizedString("filter.title", comment: "Filter")
+        button.setTitle(title, for: .normal)
+        button.backgroundColor = .ypBlue
+        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
+        button.layer.cornerRadius = 16
+        button.layer.masksToBounds = true
+        button.addTarget(self, action: #selector(filterButtonDidTap), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     private lazy var trackerStore: TrackerStoreProtocol = {
-        TrackerStore(delegate: self, for: currentDate)
+        TrackerStore(delegate: self, date: currentDate, filter: currentFilter)
     }()
     
     private enum Constants {
@@ -65,6 +78,7 @@ final class TrackersViewController: UIViewController {
     }
     
     private var currentDate: Date = Date().startOfDay
+    private var currentFilter: TrackerFilterOption = .all
     
     static let addTrackerNotificationName = NSNotification.Name("AddNewTracker")
     static let updateTrackerNotificationName = NSNotification.Name("UpdateTracker")
@@ -101,6 +115,7 @@ final class TrackersViewController: UIViewController {
         view.addSubview(stubView)
         view.addSubview(UIView(frame: .zero))
         view.addSubview(collectionView)
+        view.addSubview(filterButton)
         collectionView.isHidden = true
     }
     
@@ -108,16 +123,25 @@ final class TrackersViewController: UIViewController {
         NSLayoutConstraint.activate([
             stubView.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             stubView.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
+            
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            filterButton.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
+            filterButton.widthAnchor.constraint(equalToConstant: 114),
+            filterButton.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
     
     private func configureViewState() {
         collectionView.isHidden = trackerStore.isEmpty
         stubView.isHidden = !trackerStore.isEmpty
+        
+        let filterTitleColor: UIColor = (currentFilter == .all || currentFilter == .today) ? .ypWhite : .ypRed
+        filterButton.setTitleColor(filterTitleColor, for: .normal)
     }
     
     private func setupNavigationBar() {
@@ -195,9 +219,38 @@ final class TrackersViewController: UIViewController {
             datePicker.removeFromSuperview()
         }
         
-        trackerStore.updateDate(currentDate)
+        if currentFilter == .today && currentDate != Date().startOfDay {
+            currentFilter = .all
+        }
+        
+        trackerStore.applyFilter(currentFilter, on: currentDate)
         collectionView.reloadData()
         configureViewState()
+    }
+    
+    @objc private func filterButtonDidTap() {
+        let viewController = FilterViewController()
+        viewController.currentFilter = currentFilter
+        viewController.onFilterSelected = { [weak self] filter in
+            guard let self else { return }
+            
+            self.currentFilter = filter
+            
+            if filter == .today {
+                self.currentDate = Date().startOfDay
+                if let datePicker = datePickerButton.customView as? UIDatePicker {
+                    datePicker.date = Date().startOfDay
+                }
+            }
+            
+            self.trackerStore.applyFilter(currentFilter, on: currentDate)
+            self.collectionView.reloadData()
+            self.configureViewState()
+        }
+        
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.modalPresentationStyle = .formSheet
+        present(navigationController, animated: true)
     }
 }
 

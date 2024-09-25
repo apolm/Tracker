@@ -22,6 +22,9 @@
 		8F5CD4582C648279003933B1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F5CD4572C648279003933B1 /* Assets.xcassets */; };
 		8F5CD45B2C648279003933B1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F5CD4592C648279003933B1 /* LaunchScreen.storyboard */; };
 		8F7C14142CA04DAA002983E6 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 8F7C14162CA04DAA002983E6 /* Localizable.stringsdict */; };
+		8F80DB082CA33FEF00046239 /* TrackerFilterOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80DB072CA33FEF00046239 /* TrackerFilterOption.swift */; };
+		8F80DB0A2CA3429600046239 /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80DB092CA3429600046239 /* FilterViewController.swift */; };
+		8F80DB0C2CA342B200046239 /* FilterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F80DB0B2CA342B200046239 /* FilterCell.swift */; };
 		8F864B162C9003940053D953 /* SelectableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B152C9003940053D953 /* SelectableCell.swift */; };
 		8F864B182C900D3C0053D953 /* UIColor+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B172C900D3C0053D953 /* UIColor+Extensions.swift */; };
 		8F864B1A2C9014DF0053D953 /* EmojiCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F864B192C9014DF0053D953 /* EmojiCell.swift */; };
@@ -76,6 +79,9 @@
 		8F7C14152CA04DAA002983E6 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ru; path = ru.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		8F7C14172CA04DAC002983E6 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		8F7C14182CA04DAD002983E6 /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		8F80DB072CA33FEF00046239 /* TrackerFilterOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerFilterOption.swift; sourceTree = "<group>"; };
+		8F80DB092CA3429600046239 /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
+		8F80DB0B2CA342B200046239 /* FilterCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterCell.swift; sourceTree = "<group>"; };
 		8F864B152C9003940053D953 /* SelectableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectableCell.swift; sourceTree = "<group>"; };
 		8F864B172C900D3C0053D953 /* UIColor+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extensions.swift"; sourceTree = "<group>"; };
 		8F864B192C9014DF0053D953 /* EmojiCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCell.swift; sourceTree = "<group>"; };
@@ -162,6 +168,7 @@
 				8FA387922C745F310044EC39 /* TrackerCell.swift */,
 				8FE5CD912C8C3675004CCEF7 /* TrackerCellDelegate.swift */,
 				8FD031A52C70DDA100D3AD11 /* Model */,
+				8F80DB062CA33E9D00046239 /* Filter */,
 			);
 			path = Trackers;
 			sourceTree = "<group>";
@@ -208,6 +215,16 @@
 				8F864B142C9002C40053D953 /* CollectionViewHelpers */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		8F80DB062CA33E9D00046239 /* Filter */ = {
+			isa = PBXGroup;
+			children = (
+				8F80DB072CA33FEF00046239 /* TrackerFilterOption.swift */,
+				8F80DB092CA3429600046239 /* FilterViewController.swift */,
+				8F80DB0B2CA342B200046239 /* FilterCell.swift */,
+			);
+			path = Filter;
 			sourceTree = "<group>";
 		};
 		8F864B142C9002C40053D953 /* CollectionViewHelpers */ = {
@@ -403,12 +420,15 @@
 				8F57F35E2C65D99000C2A926 /* StatisticsViewController.swift in Sources */,
 				8FA3879E2C84723B0044EC39 /* ScheduleViewController.swift in Sources */,
 				8FE5CD942C8C45B1004CCEF7 /* GeometricParams.swift in Sources */,
+				8F80DB082CA33FEF00046239 /* TrackerFilterOption.swift in Sources */,
 				8F1D680D2C9752B10022DE36 /* TrackerCategoryStore.swift in Sources */,
 				8FE1641D2C69E09B00C1BFD3 /* StubView.swift in Sources */,
+				8F80DB0A2CA3429600046239 /* FilterViewController.swift in Sources */,
 				8FA387A02C84A3AB0044EC39 /* BaseTableView.swift in Sources */,
 				8FF6A4452C9DCDE200CA8CA8 /* OnboardingViewController.swift in Sources */,
 				8F1D680B2C9621F40022DE36 /* Set+Extensions.swift in Sources */,
 				8F1D68092C95E3FA0022DE36 /* TrackerStore.swift in Sources */,
+				8F80DB0C2CA342B200046239 /* FilterCell.swift in Sources */,
 				8F5CD44F2C648277003933B1 /* AppDelegate.swift in Sources */,
 				8FA387932C745F310044EC39 /* TrackerCell.swift in Sources */,
 				8FA387AC2C86DFE40044EC39 /* LinkCell.swift in Sources */,
