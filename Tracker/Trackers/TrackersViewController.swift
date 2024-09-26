@@ -31,11 +31,8 @@ final class TrackersViewController: UIViewController {
         return searchController
     }()
     
-    private lazy var stubView: UIView = {
-        let caption = NSLocalizedString("trackers.stubView.caption",
-                                        comment: "Caption for the stub view when there are no items to track")
+    private lazy var stubView: StubView = {
         let stubView = StubView(frame: .zero)
-        stubView.configure(with: caption)
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()
@@ -137,8 +134,24 @@ final class TrackersViewController: UIViewController {
     }
     
     private func configureViewState() {
-        collectionView.isHidden = trackerStore.isEmpty
-        stubView.isHidden = !trackerStore.isEmpty
+        let isFilteredEmpty = trackerStore.isFilteredEmpty
+        let isDateEmpty = isFilteredEmpty ? trackerStore.isDateEmpty : false
+        
+        collectionView.isHidden = isFilteredEmpty
+        stubView.isHidden = !isFilteredEmpty
+        filterButton.isHidden = isDateEmpty
+        
+        if isDateEmpty {
+            let caption = NSLocalizedString("stubView.caption.noTrackersAtDate",
+                                            comment: "Caption when there are no trackers for a selected date")
+            let image = UIImage(named: "StarEmoji")
+            stubView.configure(caption: caption, image: image)
+        } else if isFilteredEmpty {
+            let caption = NSLocalizedString("stubView.caption.noTrackersMatchFilter",
+                                            comment: "Caption when no trackers match the current filter")
+            let image = UIImage(named: "MonocleEmoji")
+            stubView.configure(caption: caption, image: image)
+        }
         
         let filterTitleColor: UIColor = (currentFilter == .all || currentFilter == .today) ? .ypWhite : .ypRed
         filterButton.setTitleColor(filterTitleColor, for: .normal)

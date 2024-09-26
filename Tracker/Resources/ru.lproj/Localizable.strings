@@ -3,7 +3,10 @@ onboarding.description.two = "Даже если это не литры воды 
 onboarding.finishButton.title = "Вот это технологии!";
 
 trackers.tabBarItem.title = "Трекеры";
-trackers.stubView.caption = "Что будем отслеживать?";
+
+stubView.caption.noTrackersAtDate = "Что будем отслеживать?";
+stubView.caption.noTrackersMatchFilter = "Ничего не найдено";
+stubView.caption.statisticsIsEmpty = "Анализировать пока нечего";
 
 statistics.tabBarItem.title = "Статистика";
 

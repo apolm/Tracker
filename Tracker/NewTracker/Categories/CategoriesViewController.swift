@@ -26,7 +26,7 @@ final class CategoriesViewController: AddTrackerFlowViewController {
             comment: "Caption for the stub view explaining grouping habits and events"
         )
         let stubView = StubView(frame: .zero)
-        stubView.configure(with: caption)
+        stubView.configure(caption: caption, image: UIImage(named: "StarEmoji"))
         stubView.translatesAutoresizingMaskIntoConstraints = false
         return stubView
     }()

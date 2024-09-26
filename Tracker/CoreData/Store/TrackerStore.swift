@@ -22,7 +22,8 @@ protocol TrackerStoreDelegate: AnyObject {
 }
 
 protocol TrackerStoreProtocol {
-    var isEmpty: Bool { get }
+    var isFilteredEmpty: Bool { get }
+    var isDateEmpty: Bool { get }
     
     var numberOfSections: Int { get }
     func numberOfItemsInSection(_ section: Int) -> Int
@@ -174,12 +175,20 @@ final class TrackerStore: NSObject {
 
 // MARK: - TrackerStoreProtocol
 extension TrackerStore: TrackerStoreProtocol {
-    var isEmpty: Bool {
+    var isFilteredEmpty: Bool {
         if let fetchedObjects = fetchedResultsController.fetchedObjects {
             return fetchedObjects.isEmpty
         } else {
             return true
         }
+    }
+    
+    var isDateEmpty: Bool {
+        let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = allTrackersFetchPredicate()
+        fetchRequest.fetchLimit = 1
+        
+        return (try? context.fetch(fetchRequest))?.isEmpty ?? true
     }
     
     var numberOfSections: Int {
