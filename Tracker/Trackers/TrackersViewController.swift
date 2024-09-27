@@ -107,6 +107,22 @@ final class TrackersViewController: UIViewController {
        removeObservers()
     }
     
+    // MARK: - Public Methods
+    func setCurrentDate(to date: Date) {
+        currentDate = date.startOfDay
+        if let datePicker = datePickerButton.customView as? UIDatePicker {
+            datePicker.date = currentDate
+        }
+        
+        if currentFilter == .today && currentDate != Date().startOfDay {
+            currentFilter = .all
+        }
+        
+        trackerStore.applyFilter(currentFilter, on: currentDate)
+        collectionView.reloadData()
+        configureViewState()
+    }
+    
     // MARK: - Private Methods
     private func setupViews() {
         view.addSubview(stubView)

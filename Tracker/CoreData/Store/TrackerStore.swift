@@ -42,6 +42,9 @@ protocol TrackerStoreProtocol {
 }
 
 final class TrackerStore: NSObject {
+    
+    // MARK: - Private Properties
+    
     private weak var delegate: TrackerStoreDelegate?
     private var date: Date
     private var filter: TrackerFilterOption
@@ -72,6 +75,14 @@ final class TrackerStore: NSObject {
         return fetchedResultsController
     }()
     
+    // MARK: - Public Methods
+    
+    override init() {
+        date = Date().startOfDay
+        filter = .all
+        categoryProvider = TrackerCategoryStore(delegate: nil)
+    }
+    
     init(delegate: TrackerStoreDelegate, date: Date, filter: TrackerFilterOption, categoryProvider: TrackerCategoryCoreDataProvider? = nil) {
         self.delegate = delegate
         self.date = date
@@ -82,6 +93,41 @@ final class TrackerStore: NSObject {
             self.categoryProvider = TrackerCategoryStore(delegate: nil)
         }
     }
+    
+    func deleteAll() throws {
+        let fetchRequestRecords: NSFetchRequest<NSFetchRequestResult> = TrackerRecordCoreData.fetchRequest()
+        let fetchRequestTrackers: NSFetchRequest<NSFetchRequestResult> = TrackerCoreData.fetchRequest()
+        let fetchRequestCategories: NSFetchRequest<NSFetchRequestResult> = TrackerCategoryCoreData.fetchRequest()
+        
+        let batchDeleteRequestRecords = NSBatchDeleteRequest(fetchRequest: fetchRequestRecords)
+        let batchDeleteRequestTrackers = NSBatchDeleteRequest(fetchRequest: fetchRequestTrackers)
+        let batchDeleteRequestCategories = NSBatchDeleteRequest(fetchRequest: fetchRequestCategories)
+        
+        batchDeleteRequestRecords.resultType = .resultTypeObjectIDs
+        batchDeleteRequestTrackers.resultType = .resultTypeObjectIDs
+        batchDeleteRequestCategories.resultType = .resultTypeObjectIDs
+        
+        let resultRecords = try context.execute(batchDeleteRequestRecords) as? NSBatchDeleteResult
+        let resultTrackers = try context.execute(batchDeleteRequestTrackers) as? NSBatchDeleteResult
+        let resultCategories = try context.execute(batchDeleteRequestCategories) as? NSBatchDeleteResult
+        
+        if let deletedRecordIDs = resultRecords?.result as? [NSManagedObjectID] {
+            let changes = [NSDeletedObjectsKey: deletedRecordIDs]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
+        }
+        
+        if let deletedTrackerIDs = resultTrackers?.result as? [NSManagedObjectID] {
+            let changes = [NSDeletedObjectsKey: deletedTrackerIDs]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
+        }
+        
+        if let deletedCategoryIDs = resultCategories?.result as? [NSManagedObjectID] {
+            let changes = [NSDeletedObjectsKey: deletedCategoryIDs]
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: changes, into: [context])
+        }
+    }
+    
+    // MARK: - Private Methods
     
     private func fetchPredicate() -> NSPredicate {
         switch filter {
