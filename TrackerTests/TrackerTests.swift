@@ -1,16 +1,13 @@
 import XCTest
+import SnapshotTesting
+@testable import Tracker
 
 final class TrackerTests: XCTestCase {
-
-    override func setUpWithError() throws {
-        
-    }
-
-    override func tearDownWithError() throws {
-        
-    }
-
-    func testExample() throws {
-        
+    
+    func testTrackers() throws {
+        let viewController = TabBarController()
+        viewController.loadViewIfNeeded()
+                
+        assertSnapshot(of: viewController, as: .image())
     }
 }
