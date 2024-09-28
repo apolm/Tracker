@@ -17,6 +17,10 @@ final class TrackersViewController: UIViewController {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         datePicker.preferredDatePickerStyle = .compact
+        datePicker.backgroundColor = .ypGrayPale
+        datePicker.overrideUserInterfaceStyle = .light
+        datePicker.layer.cornerRadius = 8
+        datePicker.layer.masksToBounds = true
         datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         let button = UIBarButtonItem(customView: datePicker)
         return button
@@ -24,10 +28,20 @@ final class TrackersViewController: UIViewController {
     
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
-        searchController.searchBar.placeholder = NSLocalizedString(
-            "searchController.searchBar.placeholder",
-            comment: "Placeholder for the search bar"
+        
+        let searchTextField = searchController.searchBar.searchTextField
+        searchTextField.clearButtonMode = .never
+        searchTextField.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("searchController.searchBar.placeholder",
+                                      comment: "Placeholder for the search bar"),
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor.ypWhiteGray]
         )
+        
+        if let glassIconView = searchTextField.leftView as? UIImageView {
+            glassIconView.image = glassIconView.image?.withRenderingMode(.alwaysTemplate)
+            glassIconView.tintColor = .ypWhiteGray
+        }
+        
         return searchController
     }()
     
@@ -45,6 +59,7 @@ final class TrackersViewController: UIViewController {
         collectionView.register(SectionHeader.self,
                                 forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
                                 withReuseIdentifier: Constants.headerIdentifier)
+        collectionView.backgroundColor = .ypWhite
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 50, right: 0)
@@ -57,6 +72,7 @@ final class TrackersViewController: UIViewController {
         let title = NSLocalizedString("filter.title", comment: "Filter")
         button.setTitle(title, for: .normal)
         button.backgroundColor = .ypBlue
+        button.overrideUserInterfaceStyle = .light
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         button.layer.cornerRadius = 16
         button.layer.masksToBounds = true
@@ -180,6 +196,8 @@ final class TrackersViewController: UIViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         title = NSLocalizedString("trackers.tabBarItem.title", comment: "Title for the Trackers tab")
+        
+        searchController.searchBar.searchTextField.textColor = .ypBlack
     }
     
     private func addObservers() {

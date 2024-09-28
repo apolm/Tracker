@@ -14,7 +14,7 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var circleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .ypWhite.withAlphaComponent(0.3)
+        view.backgroundColor = .white.withAlphaComponent(0.3)
         view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -24,6 +24,7 @@ final class TrackerCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypWhite
+        label.overrideUserInterfaceStyle = .light
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +48,7 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var completeButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .white
+        button.tintColor = .ypWhite
         button.layer.cornerRadius = 17
         button.addTarget(self, action: #selector(Self.completeButtonDidTap), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false

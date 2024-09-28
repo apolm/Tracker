@@ -42,7 +42,8 @@ final class TrackerTests: XCTestCase {
         
         trackersVC.setCurrentDate(to: date)
         
-        // Then: test snapshot
-        assertSnapshot(of: tabBarVC, as: .image())
+        // Then: test snapshots
+        assertSnapshot(of: tabBarVC, as: .image(traits: .init(userInterfaceStyle: .light)))
+        assertSnapshot(of: tabBarVC, as: .image(traits: .init(userInterfaceStyle: .dark)))
     }
 }
