@@ -37,7 +37,7 @@ protocol TrackerStoreProtocol {
     
     func completionStatus(for indexPath: IndexPath) -> TrackerCompletion
     func categoryName(for indexPath: IndexPath) -> String
-    func applyFilter(_ filter: TrackerFilterOption, on date: Date)
+    func applyFilter(_ filter: TrackerFilterOption, on date: Date, with searchQuery: String?)
     func changeCompletion(for indexPath: IndexPath, to isCompleted: Bool)
 }
 
@@ -131,18 +131,18 @@ final class TrackerStore: NSObject {
     
     // MARK: - Private Methods
     
-    private func fetchPredicate() -> NSPredicate {
+    private func fetchPredicate(with searchQuery: String? = nil) -> NSPredicate {
         switch filter {
         case .all, .today:
-            return allTrackersFetchPredicate()
+            return allTrackersFetchPredicate(with: searchQuery)
         case .completed:
-            return completedTrackersFetchPredicate()
+            return completedTrackersFetchPredicate(with: searchQuery)
         case .uncompleted:
-            return uncompletedTrackersFetchPredicate()
+            return uncompletedTrackersFetchPredicate(with: searchQuery)
         }
     }
     
-    private func allTrackersFetchPredicate() -> NSPredicate {
+    private func allTrackersFetchPredicate(with searchQuery: String? = nil) -> NSPredicate {
         let scheduleMatchDate = NSPredicate(
             format: "%K CONTAINS[n] %@",
             #keyPath(TrackerCoreData.daysRaw),
@@ -168,19 +168,29 @@ final class TrackerStore: NSObject {
         let finalPredicate = NSCompoundPredicate(
             orPredicateWithSubpredicates: [scheduleMatchDate, completionMatchDate, isNotCompletedIrregular])
         
-        return finalPredicate
+        guard let searchQuery else {
+            return finalPredicate
+        }
+        
+        return combinePredicateWithSearchQuery(predicate: finalPredicate,
+                                               query: searchQuery)
     }
     
-    private func completedTrackersFetchPredicate() -> NSPredicate {
-        let completionMatchDate = NSPredicate(
+    private func completedTrackersFetchPredicate(with searchQuery: String?) -> NSPredicate {
+        let finalPredicate = NSPredicate(
             format: "SUBQUERY(%K, $record, $record != nil AND $record.date == %@).@count > 0",
             #keyPath(TrackerCoreData.records),
             date as NSDate)
         
-        return completionMatchDate
+        guard let searchQuery else {
+            return finalPredicate
+        }
+        
+        return combinePredicateWithSearchQuery(predicate: finalPredicate,
+                                               query: searchQuery)
     }
     
-    private func uncompletedTrackersFetchPredicate() -> NSPredicate {
+    private func uncompletedTrackersFetchPredicate(with searchQuery: String?) -> NSPredicate {
         let isNotCompletedAtDate = NSPredicate(
             format: "SUBQUERY(%K, $record, $record != nil AND $record.date == %@).@count == 0",
             #keyPath(TrackerCoreData.records),
@@ -209,7 +219,23 @@ final class TrackerStore: NSObject {
         let finalPredicate = NSCompoundPredicate(
             orPredicateWithSubpredicates: [isNotCompletedRegular, isNotCompletedIrregular])
         
-        return finalPredicate
+        guard let searchQuery else {
+            return finalPredicate
+        }
+        
+        return combinePredicateWithSearchQuery(predicate: finalPredicate,
+                                               query: searchQuery)
+    }
+    
+    func combinePredicateWithSearchQuery(predicate: NSPredicate, query: String) -> NSPredicate {
+        let namePredicate = NSPredicate(
+            format: "%K CONTAINS[c] %@",
+            #keyPath(TrackerCoreData.name),
+            query
+        )
+        
+        return NSCompoundPredicate(
+            andPredicateWithSubpredicates: [predicate, namePredicate])
     }
     
     private func fetchTrackerByID(_ id: UUID) -> TrackerCoreData? {
@@ -347,11 +373,11 @@ extension TrackerStore: TrackerStoreProtocol {
         }
     }
     
-    func applyFilter(_ filter: TrackerFilterOption, on date: Date) {
+    func applyFilter(_ filter: TrackerFilterOption, on date: Date, with searchQuery: String?) {
         self.filter = filter
         self.date = date
         
-        fetchedResultsController.fetchRequest.predicate = fetchPredicate()
+        fetchedResultsController.fetchRequest.predicate = fetchPredicate(with: searchQuery)
         try? fetchedResultsController.performFetch()
     }
     

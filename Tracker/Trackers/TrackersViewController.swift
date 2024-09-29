@@ -29,6 +29,10 @@ final class TrackersViewController: UIViewController {
     private lazy var searchController: UISearchController = {
         let searchController = UISearchController()
         
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchResultsUpdater = self
+        
         let searchTextField = searchController.searchBar.searchTextField
         searchTextField.clearButtonMode = .never
         searchTextField.attributedPlaceholder = NSAttributedString(
@@ -94,6 +98,7 @@ final class TrackersViewController: UIViewController {
     
     private var currentDate: Date = Date().startOfDay
     private var currentFilter: TrackerFilterOption = .all
+    private var searchQuery: String?
     
     static let addTrackerNotificationName = NSNotification.Name("AddNewTracker")
     static let updateTrackerNotificationName = NSNotification.Name("UpdateTracker")
@@ -119,6 +124,7 @@ final class TrackersViewController: UIViewController {
         setupNavigationBar()
         configureViewState()
         addObservers()
+        addHideKeyboardTapGesture()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -146,9 +152,7 @@ final class TrackersViewController: UIViewController {
             currentFilter = .all
         }
         
-        trackerStore.applyFilter(currentFilter, on: currentDate)
-        collectionView.reloadData()
-        configureViewState()
+        applyFilterAndUpdateView()
     }
     
     // MARK: - Private Methods
@@ -242,6 +246,22 @@ final class TrackersViewController: UIViewController {
         )
     }
     
+    private func addHideKeyboardTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    private func applyFilterAndUpdateView() {
+        trackerStore.applyFilter(currentFilter, on: currentDate, with: searchQuery)
+        collectionView.reloadData()
+        configureViewState()
+    }
+    
+    @objc private func dismissKeyboard() {
+        searchController.searchBar.resignFirstResponder()
+    }
+    
     @objc
     private func addNewTracker(_ notification: Notification) {
         guard let category = notification.object as? TrackerCategory,
@@ -284,9 +304,7 @@ final class TrackersViewController: UIViewController {
             currentFilter = .all
         }
         
-        trackerStore.applyFilter(currentFilter, on: currentDate)
-        collectionView.reloadData()
-        configureViewState()
+        applyFilterAndUpdateView()
     }
     
     @objc private func filterButtonDidTap() {
@@ -306,9 +324,7 @@ final class TrackersViewController: UIViewController {
                 }
             }
             
-            self.trackerStore.applyFilter(currentFilter, on: currentDate)
-            self.collectionView.reloadData()
-            self.configureViewState()
+            self.applyFilterAndUpdateView()
         }
         
         let navigationController = UINavigationController(rootViewController: viewController)
@@ -446,6 +462,10 @@ extension TrackersViewController: UICollectionViewDelegate {
         let targetedPreview = UITargetedPreview(view: cell.cardView, parameters: parameters)
         return targetedPreview
     }
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        searchController.searchBar.resignFirstResponder()
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -550,3 +570,16 @@ extension TrackersViewController: TrackerStoreDelegate {
         configureViewState()
     }
 }
+
+// MARK: - UISearchResultsUpdating
+extension TrackersViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+            searchQuery = searchText
+        } else {
+            searchQuery = nil
+        }
+        applyFilterAndUpdateView()
+    }
+}
+
