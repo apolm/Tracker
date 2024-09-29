@@ -60,6 +60,8 @@ final class TrackerStore: NSObject {
     private var updatedIndices: [IndexPath] = []
     private var movedIndices: [(from: IndexPath, to: IndexPath)] = []
     
+    private let statisticsService: StatisticsServiceProtocol = StatisticsService()
+    
     private lazy var fetchedResultsController: NSFetchedResultsController<TrackerCoreData> = {
         let fetchRequest = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "category.order", ascending: true),
@@ -371,10 +373,14 @@ extension TrackerStore: TrackerStoreProtocol {
             trackerRecordCoreData.tracker = trackerCoreData
             
             dataController.saveContext()
+            
+            statisticsService.onTrackerCompletion()
         } else if !isCompleted,
                   let trackerRecordCoreData = existingRecord as? TrackerRecordCoreData {
             context.delete(trackerRecordCoreData)
             dataController.saveContext()
+            
+            statisticsService.onTrackerUnCompletion()
         }
     }
 }

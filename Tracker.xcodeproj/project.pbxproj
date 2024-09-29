@@ -16,6 +16,7 @@
 		8F1D680D2C9752B10022DE36 /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D680C2C9752B10022DE36 /* TrackerCategoryStore.swift */; };
 		8F1D680F2C9758620022DE36 /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F1D680E2C9758620022DE36 /* TrackerRecordStore.swift */; };
 		8F341BE32CA01D9000FB103A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 8F341BE52CA01D9000FB103A /* Localizable.strings */; };
+		8F4398D52CA967EF00A6C1FC /* StatisticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F4398D42CA967EF00A6C1FC /* StatisticsService.swift */; };
 		8F57F35C2C65D94300C2A926 /* TrackersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35B2C65D94300C2A926 /* TrackersViewController.swift */; };
 		8F57F35E2C65D99000C2A926 /* StatisticsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35D2C65D99000C2A926 /* StatisticsViewController.swift */; };
 		8F57F3602C65D9B000C2A926 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F57F35F2C65D9B000C2A926 /* TabBarController.swift */; };
@@ -87,6 +88,7 @@
 		8F341BE42CA01D9000FB103A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8F341BE62CA01D9500FB103A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8F341BE72CA048FC00FB103A /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8F4398D42CA967EF00A6C1FC /* StatisticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsService.swift; sourceTree = "<group>"; };
 		8F57F35B2C65D94300C2A926 /* TrackersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackersViewController.swift; sourceTree = "<group>"; };
 		8F57F35D2C65D99000C2A926 /* StatisticsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatisticsViewController.swift; sourceTree = "<group>"; };
 		8F57F35F2C65D9B000C2A926 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				8F57F35D2C65D99000C2A926 /* StatisticsViewController.swift */,
+				8F4398D42CA967EF00A6C1FC /* StatisticsService.swift */,
 			);
 			path = Statistics;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				8FE5CD962C8C9CB6004CCEF7 /* Date+Extensions.swift in Sources */,
 				8F1D68072C95D7690022DE36 /* Model.xcdatamodeld in Sources */,
 				8FE5CD922C8C3675004CCEF7 /* TrackerCellDelegate.swift in Sources */,
+				8F4398D52CA967EF00A6C1FC /* StatisticsService.swift in Sources */,
 				8FE51C662C9F059B0023965E /* NewCategoryViewController.swift in Sources */,
 				8FF6A4492C9E122600CA8CA8 /* UserDefaults+Extensions.swift in Sources */,
 				8F864B1C2C9015070053D953 /* ColorCell.swift in Sources */,

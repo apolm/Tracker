@@ -5,21 +5,23 @@ final class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        delegate = self
         
         let trackers = TrackersViewController()
         trackers.tabBarItem = UITabBarItem(
             title: NSLocalizedString("trackers.tabBarItem.title", comment: "Title for the Trackers tab"),
             image: UIImage(systemName: "record.circle.fill"),
             selectedImage: nil)
-        let navigationController = UINavigationController(rootViewController: trackers)
+        let trackersContainer = UINavigationController(rootViewController: trackers)
         
         let statistics = StatisticsViewController()
         statistics.tabBarItem = UITabBarItem(
             title: NSLocalizedString("statistics.tabBarItem.title", comment: "Title for the Statistics tab"),
             image: UIImage(systemName: "hare.fill"),
             selectedImage: nil)
+        let statisticsContainer = UINavigationController(rootViewController: statistics)
         
-        viewControllers = [navigationController, statistics]
+        viewControllers = [trackersContainer, statisticsContainer]
         
         setupTopBorder()
     }
@@ -44,5 +46,17 @@ final class TabBarController: UITabBarController {
         border.backgroundColor = UIColor.ypGrayDark.cgColor
         tabBar.layer.addSublayer(border)
         topBorder = border
+    }
+}
+
+// MARK: - UITabBarControllerDelegate
+
+extension TabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController,
+                          didSelect viewController: UIViewController) {
+        if let navigationController = viewController as? UINavigationController,
+           let statisticsView = navigationController.topViewController as? StatisticsViewController {
+            statisticsView.updateContent()
+        }
     }
 }
