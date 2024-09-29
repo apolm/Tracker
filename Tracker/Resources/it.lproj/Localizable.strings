@@ -1,0 +1,59 @@
+onboarding.description.one = "Traccia solo ciò che desideri";
+onboarding.description.two = "Anche se non sono litri d'acqua e yoga";
+onboarding.finishButton.title = "Che tecnologia!";
+
+trackers.tabBarItem.title = "Tracker";
+
+stubView.caption.noTrackersAtDate = "Cosa tracciamo?";
+stubView.caption.noTrackersMatchFilter = "Nessun risultato trovato";
+stubView.caption.statisticsIsEmpty = "Niente da analizzare al momento";
+
+statistics.tabBarItem.title = "Statistiche";
+
+searchController.searchBar.placeholder = "Cerca";
+
+regularTrackerButton.title = "Abitudine";
+irregularTrackerButton.title = "Evento irregolare";
+
+createTrackerView.title = "Crea tracker";
+
+newTrackerView.title.regular = "Nuova abitudine";
+newTrackerView.title.irregular = "Nuovo evento irregolare";
+existingTrackerView.title.regular = "Modifica abitudine";
+existingTrackerView.title.irregular = "Modifica evento irregolare";
+
+newCategoryView.title = "Nuova categoria";
+
+cancelButton.title = "Annulla";
+createButton.title = "Crea";
+addCategoryButton.title = "Aggiungi categoria";
+doneButton.title = "Fatto";
+saveButton.title = "Salva";
+deleteButton.title = "Elimina";
+
+categories.stubView.caption = "Le abitudini e gli eventi possono\nessere raggruppati per significato";
+
+newTrackerView.name.placeholder = "Inserisci il nome del tracker";
+newTrackerView.emojiGroup.title = "Emoji";
+newTrackerView.colorGroup.title = "Colore";
+
+newCategoryView.name.placeholder = "Inserisci il nome della categoria";
+
+category = "Categoria";
+schedule = "Programma";
+schedule.isEveryDay = "Ogni giorno";
+
+contextMenu.pin.title = "Fissa";
+contextMenu.unpin.title = "Sblocca";
+contextMenu.edit.title = "Modifica";
+contextMenu.delete.title = "Elimina";
+
+pinnedCategories.name = "Categorie fisse";
+
+deleteConfirmation.title = "Sei sicuro di voler eliminare questo tracker?";
+
+filter.all = "Tutti i tracker";
+filter.today = "Tracker per oggi";
+filter.completed = "Completato";
+filter.uncompleted = "Non completato";
+filter.title = "Filtri";

@@ -2,7 +2,7 @@ import UIKit
 
 final class TrackerCell: UICollectionViewCell {
     // MARK: - Private Properties
-    private lazy var cardView: UIView = {
+    lazy var cardView: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 16
         view.layer.masksToBounds = true
@@ -14,7 +14,7 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var circleView: UIView = {
         let view = UIView()
-        view.backgroundColor = .ypWhite.withAlphaComponent(0.3)
+        view.backgroundColor = .white.withAlphaComponent(0.3)
         view.layer.cornerRadius = 12
         view.layer.masksToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -24,6 +24,7 @@ final class TrackerCell: UICollectionViewCell {
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = .ypWhite
+        label.overrideUserInterfaceStyle = .light
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -47,11 +48,19 @@ final class TrackerCell: UICollectionViewCell {
     
     private lazy var completeButton: UIButton = {
         let button = UIButton()
-        button.tintColor = .white
+        button.tintColor = .ypWhite
         button.layer.cornerRadius = 17
         button.addTarget(self, action: #selector(Self.completeButtonDidTap), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    private let pinImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "pin.fill")
+        imageView.tintColor = .ypWhite
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        return imageView
     }()
     
     private var isCompleted = false
@@ -60,6 +69,7 @@ final class TrackerCell: UICollectionViewCell {
     
     // MARK: - Public Properties
     weak var delegate: TrackerCellDelegate?
+    var isPinned: Bool = false
     
     // MARK: - Public Methods
     override init(frame: CGRect) {
@@ -69,6 +79,7 @@ final class TrackerCell: UICollectionViewCell {
         cardView.addSubview(circleView)
         cardView.addSubview(titleLabel)
         cardView.addSubview(emojiLabel)
+        cardView.addSubview(pinImage)
         addSubview(counterLabel)
         addSubview(completeButton)
         
@@ -79,10 +90,17 @@ final class TrackerCell: UICollectionViewCell {
         super.init(coder: coder)
     }
     
-    func config(with tracker: Tracker, numberOfCompletions: Int, isCompleted: Bool, completionIsEnabled: Bool) {
+    func config(
+        with tracker: Tracker,
+        numberOfCompletions: Int,
+        isCompleted: Bool,
+        completionIsEnabled: Bool,
+        isPinned: Bool
+    ) {
         self.isCompleted = isCompleted
         self.numberOfCompletions = numberOfCompletions
         self.color = tracker.color
+        self.isPinned = isPinned
         
         cardView.backgroundColor = tracker.color
         completeButton.isEnabled = completionIsEnabled
@@ -102,17 +120,15 @@ final class TrackerCell: UICollectionViewCell {
             completeButton.backgroundColor = color
         }
         
-        let remainder100 = numberOfCompletions % 100
-        let remainder10 = numberOfCompletions % 10
-        if remainder100 >= 11 && remainder100 <= 14 {
-            counterLabel.text = "\(numberOfCompletions) дней"
-        } else if remainder10 == 1 {
-            counterLabel.text = "\(numberOfCompletions) день"
-        } else if remainder10 >= 2 && remainder10 <= 4 {
-            counterLabel.text = "\(numberOfCompletions) дня"
-        } else {
-            counterLabel.text = "\(numberOfCompletions) дней"
-        }
+        counterLabel.text = String(
+            format: NSLocalizedString(
+                "numberOfDays",
+                comment: "Number of days"
+            ),
+            numberOfCompletions
+        )
+        
+        pinImage.isHidden = !isPinned
     }
     
     private func setupConstraints() {
@@ -144,7 +160,12 @@ final class TrackerCell: UICollectionViewCell {
             counterLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 12),
             counterLabel.trailingAnchor.constraint(equalTo: completeButton.leadingAnchor, constant: -8),
             counterLabel.topAnchor.constraint(equalTo: cardView.bottomAnchor, constant: 16),
-            counterLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24)
+            counterLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -24),
+            
+            pinImage.trailingAnchor.constraint(equalTo: cardView.trailingAnchor, constant: -10),
+            pinImage.centerYAnchor.constraint(equalTo: circleView.centerYAnchor),
+            pinImage.widthAnchor.constraint(equalToConstant: 12),
+            pinImage.heightAnchor.constraint(equalToConstant: 12)
         ])
     }
     

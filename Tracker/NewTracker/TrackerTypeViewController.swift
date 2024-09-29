@@ -2,11 +2,29 @@ import UIKit
 
 final class TrackerTypeViewController: AddTrackerFlowViewController {
     private lazy var regularTrackerButton: ActionButton = {
-        ActionButton(title: "Привычка", target: self, action: #selector(buttonDidTap))
+        ActionButton(
+            title: NSLocalizedString(
+                "regularTrackerButton.title",
+                comment: "Title for the habit tracker button"
+            ),
+            target: self,
+            action: #selector(
+                buttonDidTap
+            )
+        )
     }()
     
     private lazy var irregularTrackerButton: ActionButton = {
-        ActionButton(title: "Нерегулярное событие", target: self, action: #selector(buttonDidTap))
+        ActionButton(
+            title: NSLocalizedString(
+                "irregularTrackerButton.title",
+                comment: "Title for the irregular event tracker button"
+            ),
+            target: self,
+            action: #selector(
+                buttonDidTap
+            )
+        )
     }()
     
     private lazy var stackView: UIStackView = {
@@ -31,12 +49,15 @@ final class TrackerTypeViewController: AddTrackerFlowViewController {
             irregularTrackerButton.heightAnchor.constraint(equalToConstant: 60)
         ])
         
-        title = "Создание трекера"
+        title = NSLocalizedString(
+            "createTrackerView.title",
+            comment: "Title for the tracker creation view"
+        )
     }
     
     @objc private func buttonDidTap(_ sender: UIButton) {
         let isRegular = sender == regularTrackerButton
-        let viewController = NewTrackerViewController(isRegular: isRegular)
+        let viewController = EditTrackerViewController(isRegular: isRegular)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

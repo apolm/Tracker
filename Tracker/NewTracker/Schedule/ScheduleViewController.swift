@@ -9,7 +9,8 @@ final class ScheduleViewController: AddTrackerFlowViewController {
         return table
     }()
     private lazy var completeButton: ActionButton = {
-        ActionButton(title: "Готово", target: self, action: #selector(completeButtonDidTap))
+        let title = NSLocalizedString("doneButton.title", comment: "Title for the done button")
+        return ActionButton(title: title, target: self, action: #selector(completeButtonDidTap))
     }()
     private var schedule: [(Weekday, Bool)] = []
     private let cellReuseID = "ScheduleCell"
@@ -35,7 +36,7 @@ final class ScheduleViewController: AddTrackerFlowViewController {
         view.addSubview(completeButton)
         setupConstraints()
         
-        title = "Расписание"
+        title = NSLocalizedString("schedule", comment: "Title for the schedule view")
     }
     
     @objc func completeButtonDidTap(_ sender: UIButton) {

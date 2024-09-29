@@ -21,7 +21,8 @@ final class OnboardingPage: UIViewController {
     }()
     
     private lazy var finishButton: ActionButton = {
-        ActionButton(title: "Вот это технологии!", target: self, action: #selector(finishButtonDidTap))
+        let title = NSLocalizedString("onboarding.finishButton.title", comment: "Title for the finish button")
+        return ActionButton(title: title, target: self, action: #selector(finishButtonDidTap))
     }()
     
     private var labelOffset: CGFloat = {
