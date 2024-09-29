@@ -2,27 +2,45 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>numberOfDays</key>
+    <key>trackers.completedCount</key>
     <dict>
         <key>NSStringLocalizedFormatKey</key>
-        <string>%#@VARIABLE@</string>
-        <key>VARIABLE</key>
+        <string>%#@trackers@</string>
+        <key>trackers</key>
         <dict>
             <key>NSStringFormatSpecTypeKey</key>
             <string>NSStringPluralRuleType</string>
             <key>NSStringFormatValueTypeKey</key>
             <string>d</string>
             <key>zero</key>
-            <string>0 days</string>
+            <string>Trackers completed</string>
             <key>one</key>
-            <string>%d day</string>
-            <key>few</key>
-            <string>%d days</string>
-            <key>many</key>
-            <string>%d days</string>
+            <string>Tracker completed</string>
             <key>other</key>
-            <string>%d days</string>
+            <string>Trackers completed</string>
         </dict>
     </dict>
+	<key>numberOfDays</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>zero</key>
+			<string>0 days</string>
+			<key>one</key>
+			<string>%d day</string>
+			<key>few</key>
+			<string>%d days</string>
+			<key>many</key>
+			<string>%d days</string>
+			<key>other</key>
+			<string>%d days</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

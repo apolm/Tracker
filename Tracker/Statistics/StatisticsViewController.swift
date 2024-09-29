@@ -24,7 +24,6 @@ final class StatisticsViewController: UIViewController {
     
     private lazy var completedCaptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "TEST2"
         label.font = .systemFont(ofSize: 12, weight: .medium)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -72,6 +71,13 @@ final class StatisticsViewController: UIViewController {
             stubView.configure(caption: caption, image: image)
         } else {
             completedNumberLabel.text = String(numberOfCompleted)
+            completedCaptionLabel.text = String(
+                format: NSLocalizedString(
+                    "trackers.completedCount",
+                    comment: "Number of completed trackers"
+                ),
+                numberOfCompleted
+            )
         }
     }
     
