@@ -3,7 +3,6 @@ import UIKit
 final class StubView: UIView {
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "StarEmoji")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -44,7 +43,8 @@ final class StubView: UIView {
         ])
     }
     
-    func configure(with caption: String) {
+    func configure(caption: String, image: UIImage?) {
         label.text = caption
+        imageView.image = image
     }
 }

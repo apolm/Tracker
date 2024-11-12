@@ -9,6 +9,11 @@
 ## User settings
 xcuserdata/
 
+## Pod's
+Pods/
+*.lock
+*.xcworkspace
+
 ## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
 *.xcscmblueprint
 *.xccheckout
@@ -99,3 +104,5 @@ iOSInjectionProject/
 **/xcshareddata/WorkspaceSettings.xcsettings
 
 # End of https://www.toptal.com/developers/gitignore/api/swift,xcode
+
+Tracker.xcscheme

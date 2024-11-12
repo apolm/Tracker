@@ -1,0 +1,59 @@
+onboarding.description.one = "Отслеживайте только то, что хотите";
+onboarding.description.two = "Даже если это не литры воды и йога";
+onboarding.finishButton.title = "Вот это технологии!";
+
+trackers.tabBarItem.title = "Трекеры";
+
+stubView.caption.noTrackersAtDate = "Что будем отслеживать?";
+stubView.caption.noTrackersMatchFilter = "Ничего не найдено";
+stubView.caption.statisticsIsEmpty = "Анализировать пока нечего";
+
+statistics.tabBarItem.title = "Статистика";
+
+searchController.searchBar.placeholder = "Поиск";
+
+regularTrackerButton.title = "Привычка";
+irregularTrackerButton.title = "Нерегулярное событие";
+
+createTrackerView.title = "Создание трекера";
+
+newTrackerView.title.regular = "Новая привычка";
+newTrackerView.title.irregular = "Новое нерегулярное событие";
+existingTrackerView.title.regular = "Редактирование привычки";
+existingTrackerView.title.irregular = "Редактирование нерегулярного события";
+
+newCategoryView.title = "Новая категория";
+
+cancelButton.title = "Отменить";
+createButton.title = "Создать";
+addCategoryButton.title = "Добавить категорию";
+doneButton.title = "Готово";
+saveButton.title = "Сохранить";
+deleteButton.title = "Удалить";
+
+categories.stubView.caption = "Привычки и события можно\nобъединить по смыслу";
+
+newTrackerView.name.placeholder = "Введите название трекера";
+newTrackerView.emojiGroup.title = "Emoji";
+newTrackerView.colorGroup.title = "Цвет";
+
+newCategoryView.name.placeholder = "Введите название категории";
+
+category = "Категория";
+schedule = "Расписание";
+schedule.isEveryDay = "Каждый день";
+
+contextMenu.pin.title = "Закрепить";
+contextMenu.unpin.title = "Открепить";
+contextMenu.edit.title = "Редактировать";
+contextMenu.delete.title = "Удалить";
+
+pinnedCategories.name = "Закрепленные";
+
+deleteConfirmation.title = "Уверены что хотите удалить трекер?";
+
+filter.all = "Все трекеры";
+filter.today = "Трекеры на сегодня";
+filter.completed = "Завершенные";
+filter.uncompleted = "Не завершенные";
+filter.title = "Фильтры";

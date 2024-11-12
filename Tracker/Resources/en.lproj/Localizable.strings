@@ -1,0 +1,59 @@
+onboarding.description.one = "Track only what you want";
+onboarding.description.two = "Even if it's not liters of water and yoga";
+onboarding.finishButton.title = "What a technology!";
+
+trackers.tabBarItem.title = "Trackers";
+
+stubView.caption.noTrackersAtDate = "What will we track?";
+stubView.caption.noTrackersMatchFilter = "Nothing found";
+stubView.caption.statisticsIsEmpty = "Nothing to analyze yet";
+
+statistics.tabBarItem.title = "Statistics";
+
+searchController.searchBar.placeholder = "Search";
+
+regularTrackerButton.title = "Habit";
+irregularTrackerButton.title = "Irregular event";
+
+createTrackerView.title = "Create tracker";
+
+newTrackerView.title.regular = "New habit";
+newTrackerView.title.irregular = "New irregular event";
+existingTrackerView.title.regular = "Edit habit";
+existingTrackerView.title.irregular = "Edit irregular event";
+
+newCategoryView.title = "New category";
+
+cancelButton.title = "Cancel";
+createButton.title = "Create";
+addCategoryButton.title = "Add category";
+doneButton.title = "Done";
+saveButton.title = "Save";
+deleteButton.title = "Delete";
+
+categories.stubView.caption = "Habits and events can\nbe grouped by meaning";
+
+newTrackerView.name.placeholder = "Enter tracker name";
+newTrackerView.emojiGroup.title = "Emoji";
+newTrackerView.colorGroup.title = "Color";
+
+newCategoryView.name.placeholder = "Enter category name";
+
+category = "Category";
+schedule = "Schedule";
+schedule.isEveryDay = "Every day";
+
+contextMenu.pin.title = "Pin";
+contextMenu.unpin.title = "Unpin";
+contextMenu.edit.title = "Edit";
+contextMenu.delete.title = "Delete";
+
+pinnedCategories.name = "Pinned";
+
+deleteConfirmation.title = "Are you sure you want to delete this tracker?";
+
+filter.all = "All trackers";
+filter.today = "Trackers for current day";
+filter.completed = "Completed";
+filter.uncompleted = "Uncompleted";
+filter.title = "Filters";
